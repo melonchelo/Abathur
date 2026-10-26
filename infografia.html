@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abathur — Camino a la entrega</title>
+  <style>
+    :root {
+      --bg: #fbf3ec;
+      --ink: #1f2259;
+      --muted: #5d5f86;
+      --navy: #2d3283;
+      --edge: #c9cdf0;
+      --coral: #f46b6b;
+      --sun: #ffd47a;
+      --sky: #8ccaf7;
+      --mint: #6fd1a5;
+      --orange: #f39a3d;
+      --red: #d94848;
+      --card: #fffaf5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.45 "Segoe UI", system-ui, sans-serif;
+    }
+
+    .page { max-width: 1240px; margin: 0 auto; padding: 32px 20px 48px; }
+
+    header { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: end; }
+
+    h1 {
+      margin: 0;
+      font-size: 54px;
+      line-height: 0.95;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+
+    .sub { margin: 12px 0 0; color: var(--muted); font-size: 18px; max-width: 54ch; }
+
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .stat { background: var(--card); border: 2px solid #efe1d3; border-radius: 16px; padding: 10px 12px; }
+    .stat b { display: block; font-size: 22px; color: var(--navy); line-height: 1.15; }
+    .stat span { font-size: 13px; color: var(--muted); }
+
+    .bar { grid-column: 1 / -1; height: 12px; border-radius: 99px; background: #efe3d7; overflow: hidden; }
+    .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--mint), var(--coral)); }
+
+    .now { margin: 22px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .now article { background: var(--card); border-radius: 16px; padding: 12px 16px; border-left: 6px solid var(--coral); }
+    .now article.be { border-left-color: var(--orange); }
+    .now article.be.atrasado { border-left-color: var(--red); }
+    .now h2 { margin: 0 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .now p { margin: 0; }
+
+    .stage { margin-top: 10px; }
+    svg.road { width: 100%; height: auto; display: block; }
+
+    .card { height: 100%; display: flex; flex-direction: column; font-size: 13.5px; line-height: 1.35; }
+    .card.up { justify-content: flex-end; }
+    .card .inner { background: var(--card); border-radius: 14px; padding: 10px 12px; border: 2px solid #efe1d3; }
+    .card.en_curso .inner { border-color: var(--coral); box-shadow: 0 6px 18px rgba(244, 107, 107, 0.22); }
+    .card.hecho .inner { opacity: 0.72; }
+    .when { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.03em; }
+    .card h3 { margin: 2px 0 5px; font-size: 17px; line-height: 1.15; color: var(--navy); }
+    .who { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 6px; }
+    .who span { font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 99px; background: #e9ebfb; color: var(--navy); }
+    .card ul { margin: 0; padding-left: 16px; }
+    .card li { margin: 1px 0; }
+    .wait { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--orange); }
+    .wait.atrasado { color: var(--red); }
+    .wait.listo { color: #18865a; }
+
+    .pulse { animation: pulse 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes pulse { from { transform: scale(1); opacity: 0.55; } to { transform: scale(1.55); opacity: 0; } }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 6px 0 0; font-size: 14px; color: var(--muted); }
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+    .tag { width: 22px; height: 14px; border-radius: 4px; display: inline-block; }
+
+    .how { margin-top: 22px; padding: 14px 16px; background: var(--card); border-radius: 16px; font-size: 14px; color: var(--muted); }
+    .how b { color: var(--ink); }
+    .how code { font-family: Consolas, ui-monospace, monospace; background: #f1e6da; padding: 0 5px; border-radius: 4px; color: var(--ink); }
+    .how a { color: var(--navy); }
+
+    .list { display: none; margin-top: 18px; }
+    .list ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    .list li.step { background: var(--card); border-radius: 14px; padding: 12px 14px; border-left: 6px solid var(--sky); }
+    .list li.step.en_curso { border-left-color: var(--coral); }
+    .list li.step.hecho { border-left-color: var(--mint); opacity: 0.8; }
+    .list h3 { margin: 2px 0 4px; color: var(--navy); }
+    .list ul { margin: 4px 0 0; padding-left: 18px; }
+
+    @media (max-width: 760px) {
+      header, .now { grid-template-columns: 1fr; }
+      h1 { font-size: 38px; }
+      .stage { display: none; }
+      .list { display: block; }
+    }
+
+    @media print {
+      body { background: white; }
+      .pulse { animation: none; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Abathur<br>camino a la entrega</h1>
+        <p class="sub">Los cierres caen en miércoles. El viernes es clase y no tiene fecha límite. Entrega el martes 17/11; defensa presencial el viernes 20/11.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>Hoy</span><b id="stat-hoy"></b></div>
+        <div class="stat"><span id="stat-faltan-label">Faltan para entregar</span><b id="stat-faltan"></b></div>
+        <div class="stat"><span>Entrega del TP</span><b id="stat-entrega"></b></div>
+        <div class="stat"><span>Defensa presencial</span><b id="stat-defensa"></b></div>
+        <div class="bar" title="Tiempo transcurrido desde el arranque"><i id="stat-bar"></i></div>
+      </div>
+    </header>
+
+    <section class="now" aria-label="Situación actual">
+      <article id="now-paso"></article>
+      <article id="now-be" class="be"></article>
+    </section>
+
+    <div class="stage">
+      <svg class="road" id="road" viewBox="0 0 1200 900" role="img" aria-label="Ruta de pasos de frontend hasta la entrega"></svg>
+    </div>
+
+    <div class="legend" aria-label="Referencias">
+      <span><i class="dot" style="background: var(--mint)"></i>Hecho</span>
+      <span><i class="dot" style="background: var(--coral)"></i>En curso</span>
+      <span><i class="dot" style="background: var(--sky)"></i>Próximo</span>
+      <span><i class="tag" style="background: var(--orange)"></i>Backend pendiente</span>
+      <span><i class="tag" style="background: var(--mint)"></i>Backend listo</span>
+      <span><i class="tag" style="background: var(--red)"></i>Backend atrasado</span>
+      <span><i class="dot" style="background: var(--coral); outline: 3px solid white"></i>Hoy</span>
+    </div>
+
+    <section class="list" aria-label="Pasos en lista"><ol id="list"></ol></section>
+
+    <p class="how">
+      <b>Cómo actualizarla.</b> Los datos están al final de este archivo. Cuando un endpoint esté en <code>main</code>, cambiá su <code>listo</code> a <code>true</code>. El estado de cada paso sale de las fechas; si van adelantados o atrasados, fijalo con <code>estado: 'hecho'</code>, <code>'en_curso'</code> o <code>'pendiente'</code>. Para ver cómo se vería otro día, agregá <code>?hoy=2026-11-05</code> a la URL.
+      Detalle completo en el <a href="roadmap.html">roadmap</a> y tareas en el <a href="backlog.html">backlog</a>.
+    </p>
+  </div>
+
+  <script>
+    const ENTREGA = '2026-11-17';
+    const DEFENSA = '2026-11-20';
+
+    // estado: null lo calcula por fecha; 'hecho' | 'en_curso' | 'pendiente' lo fija a mano.
+    const pasos = [
+      {
+        id: 'B0', icono: '🧱', titulo: 'Arranque', inicio: '2026-10-26', fin: '2026-10-28',
+        equipo: ['Todos'],
+        tareas: ['Angular strict y lint sin any', 'Modelos, token API e interceptor', 'Shell, rutas e ingreso'],
+        estado: null,
+      },
+      {
+        id: 'B1', icono: '🔎', titulo: 'Consulta y propuestas', inicio: '2026-10-29', fin: '2026-11-04',
+        equipo: ['A', 'B'],
+        tareas: ['A: artículos, búsqueda, categorías e historial', 'B: propuestas, diff y comentarios', 'Directivas y pipes propios'],
+        estado: null,
+      },
+      {
+        id: 'B2', icono: '🗳️', titulo: 'Votación con signals', inicio: '2026-11-05', fin: '2026-11-11',
+        equipo: ['B', 'A'],
+        tareas: ['B: VoteTallyStore, voto y cierre', 'A: formularios de artículo y categoría'],
+        estado: null,
+      },
+      {
+        id: 'B3', icono: '⚖️', titulo: 'Decisión y reputación', inicio: '2026-11-12', fin: '2026-11-16',
+        equipo: ['Vos', 'B', 'A'],
+        tareas: ['Vos: pantalla de decisión', 'B: ReputationStore', 'A: nueva versión en el historial'],
+        estado: null,
+      },
+      {
+        id: 'B4', icono: '🛡️', titulo: 'Cuentas y permisos', inicio: '2026-11-16', fin: '2026-11-16',
+        equipo: ['Vos', 'A', 'B'],
+        tareas: ['Vos: usuarios y auditoría', 'Recorrido con los 3 roles y barrido de any', '16/11: congelar, solo bugs'],
+        estado: null,
+      },
+      {
+        id: 'B5', icono: '🏁', titulo: 'Entrega del TP', inicio: '2026-11-17', fin: '2026-11-17',
+        equipo: ['Todos'],
+        tareas: ['Tag v1.0 y semilla recreada', 'README para levantar front y back'],
+        estado: null,
+      },
+      {
+        id: 'B6', icono: '🎤', titulo: 'Ensayo de la defensa', inicio: '2026-11-18', fin: '2026-11-19',
+        equipo: ['Todos'],
+        tareas: ['Guion con los tres roles', 'Cada uno sabe qué archivo explica'],
+        estado: null,
+      },
+      {
+        id: 'B7', icono: '🎓', titulo: 'Defensa presencial', inicio: '2026-11-20', fin: '2026-11-20',
+        equipo: ['Todos'],
+        tareas: ['Defensa por temática', 'Recorrido de cliente, moderadores y admin'],
+        estado: null,
+      },
+    ];
+
+    // listo: pasar a true cuando el endpoint esté disponible en main.
+    const backend = [
+      { id: 'BE-0', titulo: 'Login, /me y GET con semilla', fecha: '2026-10-28', desbloquea: 'B1', listo: false },
+      { id: 'BE-1', titulo: 'POST de artículos, categorías, propuestas y comentarios', fecha: '2026-11-03', desbloquea: 'B1', listo: false },
+      { id: 'BE-2', titulo: 'Voto y cierre de votación', fecha: '2026-11-09', desbloquea: 'B2', listo: false },
+      { id: 'BE-3', titulo: 'Decisión, versiones, reputación y auditoría', fecha: '2026-11-11', desbloquea: 'B3', listo: false },
+      { id: 'BE-4', titulo: 'Usuarios y listado de auditoría', fecha: '2026-11-12', desbloquea: 'B4', listo: false },
+    ];
+
+    const DIA = 86400000;
+    const SVG = 'http://www.w3.org/2000/svg';
+    const XHTML = 'http://www.w3.org/1999/xhtml';
+    const W = 1200;
+    const CRESTA = 300;
+    const VALLE = 600;
+    const R = 44;
+
+    const parse = (s) => {
+      const [y, m, d] = s.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    };
+
+    const hoy = (() => {
+      const q = new URLSearchParams(location.search).get('hoy');
+      if (q && /^\d{4}-\d{2}-\d{2}$/.test(q)) return parse(q);
+      const n = new Date();
+      return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+    })();
+
+    const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+    const dm = (d) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+    const conDia = { format: (d) => `${DIAS[d.getDay()]} ${dm(d)}` };
+    const fc = (s) => dm(parse(s));
+    const dias = (a, b) => Math.round((b - a) / DIA);
+
+    const colorPaso = { hecho: 'var(--mint)', en_curso: 'var(--coral)', pendiente: 'var(--sky)' };
+    const colorBE = { listo: 'var(--mint)', pendiente: 'var(--orange)', atrasado: 'var(--red)' };
+    const textoBE = { listo: 'listo', pendiente: 'pendiente', atrasado: 'atrasado' };
+
+    function estadoPaso(p) {
+      if (p.estado) return p.estado;
+      if (hoy > parse(p.fin)) return 'hecho';
+      if (hoy >= parse(p.inicio)) return 'en_curso';
+      return 'pendiente';
+    }
+
+    function estadoBE(b) {
+      if (b.listo) return 'listo';
+      return hoy > parse(b.fecha) ? 'atrasado' : 'pendiente';
+    }
+
+    function el(tag, attrs, parent) {
+      const node = document.createElementNS(SVG, tag);
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, String(v));
+      if (parent) parent.appendChild(node);
+      return node;
+    }
+
+    const gap = (1090 - 110) / (pasos.length - 1);
+    const pts = pasos.map((_, i) => ({ x: 110 + gap * i, y: i % 2 === 0 ? VALLE : CRESTA }));
+
+    function tramo(i) {
+      const a = pts[i];
+      const b = pts[i + 1];
+      const dx = b.x - a.x;
+      return [a, { x: a.x + dx / 2, y: a.y }, { x: b.x - dx / 2, y: b.y }, b];
+    }
+
+    const lerp = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+
+    function partir(c, t) {
+      const ab = lerp(c[0], c[1], t);
+      const bc = lerp(c[1], c[2], t);
+      const cd = lerp(c[2], c[3], t);
+      const abc = lerp(ab, bc, t);
+      const bcd = lerp(bc, cd, t);
+      return [c[0], ab, abc, lerp(abc, bcd, t)];
+    }
+
+    const punto = (c, t) => partir(c, t)[3];
+    const curva = (c) => ` C ${c[1].x} ${c[1].y} ${c[2].x} ${c[2].y} ${c[3].x} ${c[3].y}`;
+
+    function ubicar(fecha) {
+      const t = fecha.getTime();
+      const inicios = pasos.map((p) => parse(p.inicio).getTime());
+      if (t <= inicios[0]) return { i: -1, k: 1, p: pts[0] };
+      for (let i = 0; i < pasos.length - 1; i++) {
+        if (t < inicios[i + 1]) {
+          const k = (t - inicios[i]) / (inicios[i + 1] - inicios[i]);
+          return { i, k, p: punto(tramo(i), k) };
+        }
+      }
+      return { i: pasos.length - 1, k: 0, p: pts[pts.length - 1] };
+    }
+
+    function dibujarRuta(svg) {
+      const deco = el('g', { opacity: 0.55 }, svg);
+      el('circle', { cx: 1140, cy: 60, r: 90, fill: 'var(--sun)' }, deco);
+      el('circle', { cx: 60, cy: 860, r: 70, fill: 'var(--sky)', opacity: 0.6 }, deco);
+      el('circle', { cx: 1150, cy: 820, r: 60, fill: 'var(--mint)', opacity: 0.6 }, deco);
+      el('circle', { cx: 640, cy: 470, r: 38, fill: 'none', stroke: 'var(--mint)', 'stroke-width': 14, opacity: 0.6 }, deco);
+
+      let d = `M 20 ${VALLE} L ${pts[0].x} ${pts[0].y}`;
+      for (let i = 0; i < pts.length - 1; i++) d += curva(tramo(i));
+      d += ` L 1180 ${VALLE}`;
+
+      el('path', { d, fill: 'none', stroke: 'var(--edge)', 'stroke-width': 62, 'stroke-linecap': 'round' }, svg);
+      el('path', { d, fill: 'none', stroke: 'var(--navy)', 'stroke-width': 48, 'stroke-linecap': 'round' }, svg);
+
+      const pos = ubicar(hoy);
+      if (hoy >= parse(pasos[0].inicio)) {
+        let recorrido = `M 20 ${VALLE} L ${pts[0].x} ${pts[0].y}`;
+        for (let i = 0; i < pos.i; i++) recorrido += curva(tramo(i));
+        if (pos.i >= 0 && pos.i < pts.length - 1) recorrido += curva(partir(tramo(pos.i), pos.k));
+        el('path', { d: recorrido, fill: 'none', stroke: '#18a08f', 'stroke-width': 48, 'stroke-linecap': 'round', opacity: 0.9 }, svg);
+      }
+
+      el('path', { d, fill: 'none', stroke: 'white', 'stroke-width': 3, 'stroke-dasharray': '14 12', opacity: 0.85 }, svg);
+      return pos;
+    }
+
+    function dibujarBackend(svg) {
+      for (const b of backend) {
+        const { p } = ubicar(parse(b.fecha));
+        const est = estadoBE(b);
+        const g = el('g', { transform: `translate(${p.x} ${p.y})` }, svg);
+        const title = el('title', {}, g);
+        title.textContent = `${b.id} · ${b.titulo} · ${fc(b.fecha)} · ${textoBE[est]}`;
+        el('rect', { x: -40, y: -21, width: 80, height: 42, rx: 9, fill: colorBE[est], stroke: 'white', 'stroke-width': 3 }, g);
+        const t1 = el('text', { y: -3, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 800, fill: 'white' }, g);
+        t1.textContent = b.listo ? `✓ ${b.id}` : b.id;
+        const t2 = el('text', { y: 13, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 600, fill: 'white' }, g);
+        t2.textContent = fc(b.fecha);
+      }
+    }
+
+    function esperas(p) {
+      return backend.filter((b) => b.desbloquea === p.id);
+    }
+
+    function htmlCard(p, est, arriba) {
+      const rango = p.inicio === p.fin ? fc(p.inicio) : `${fc(p.inicio)} → ${fc(p.fin)}`;
+      const quien = p.equipo.map((q) => `<span>${q}</span>`).join('');
+      const tareas = p.tareas.map((t) => `<li>${t}</li>`).join('');
+      const bloq = esperas(p)
+        .map((b) => {
+          const e = estadoBE(b);
+          const txt = e === 'listo' ? `✓ ${b.id} listo` : `⛔ espera ${b.id} · ${fc(b.fecha)}${e === 'atrasado' ? ' · atrasado' : ''}`;
+          return `<div class="wait ${e}" title="${b.titulo}">${txt}</div>`;
+        })
+        .join('');
+      return `<div class="card ${est} ${arriba ? 'up' : ''}"><div class="inner">
+        <div class="when">${p.id} · ${rango}</div>
+        <h3>${p.titulo}</h3>
+        <div class="who">${quien}</div>
+        <ul>${tareas}</ul>${bloq}
+      </div></div>`;
+    }
+
+    function dibujarPasos(svg) {
+      pasos.forEach((p, i) => {
+        const est = estadoPaso(p);
+        const { x, y } = pts[i];
+        const g = el('g', { transform: `translate(${x} ${y})` }, svg);
+        if (est === 'en_curso') el('circle', { r: R, fill: 'var(--coral)', class: 'pulse' }, g);
+        el('circle', { r: R, fill: colorPaso[est], stroke: 'white', 'stroke-width': 6 }, g);
+        const ic = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 34 }, g);
+        ic.textContent = p.icono;
+        if (est === 'hecho') {
+          el('circle', { cx: 32, cy: -32, r: 13, fill: '#18865a', stroke: 'white', 'stroke-width': 3 }, g);
+          const ok = el('text', { x: 32, y: -32, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 14, 'font-weight': 800, fill: 'white' }, g);
+          ok.textContent = '✓';
+        }
+
+        const arriba = y === CRESTA;
+        const fo = el('foreignObject', {
+          x: Math.min(W - 252, Math.max(8, x - 122)), y: arriba ? 0 : VALLE + R + 12, width: 244, height: arriba ? CRESTA - R - 12 : 900 - (VALLE + R + 12),
+        }, svg);
+        const div = document.createElementNS(XHTML, 'div');
+        div.style.height = '100%';
+        div.innerHTML = htmlCard(p, est, arriba);
+        fo.appendChild(div);
+      });
+    }
+
+    function dibujarHoy(svg, pos) {
+      if (hoy < parse(pasos[0].inicio) || hoy > parse(DEFENSA)) return;
+      let { x, y } = pos.p;
+      const cerca = pts.find((s) => Math.hypot(s.x - x, s.y - y) < 60);
+      if (cerca) {
+        x = cerca.x - 40;
+        y = cerca.y - 40;
+      }
+      const g = el('g', { transform: `translate(${x} ${y})` }, svg);
+      const title = el('title', {}, g);
+      title.textContent = `Hoy · ${conDia.format(hoy)}`;
+      el('circle', { r: 20, fill: 'var(--coral)', class: 'pulse' }, g);
+      el('circle', { r: 20, fill: 'var(--coral)', stroke: 'white', 'stroke-width': 4 }, g);
+      const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11, 'font-weight': 800, fill: 'white' }, g);
+      t.textContent = 'HOY';
+    }
+
+    function encabezado() {
+      const inicio = parse(pasos[0].inicio);
+      const entrega = parse(ENTREGA);
+      const defensa = parse(DEFENSA);
+      const faltanEntrega = dias(hoy, entrega);
+      const faltanDefensa = dias(hoy, defensa);
+      const textoDias = (n) => (n === 1 ? '1 día' : `${n} días`);
+      document.getElementById('stat-hoy').textContent = conDia.format(hoy);
+      document.getElementById('stat-entrega').textContent = conDia.format(entrega);
+      document.getElementById('stat-defensa').textContent = conDia.format(defensa);
+      const etiqueta = document.getElementById('stat-faltan-label');
+      const valor = document.getElementById('stat-faltan');
+      if (faltanEntrega > 0) {
+        etiqueta.textContent = 'Faltan para entregar';
+        valor.textContent = textoDias(faltanEntrega);
+      } else if (faltanDefensa > 0) {
+        etiqueta.textContent = 'Faltan para la defensa';
+        valor.textContent = textoDias(faltanDefensa);
+      } else if (faltanDefensa === 0) {
+        etiqueta.textContent = 'Defensa presencial';
+        valor.textContent = 'Es hoy';
+      } else {
+        etiqueta.textContent = 'Defensa presencial';
+        valor.textContent = 'Hecha';
+      }
+      const pct = Math.min(100, Math.max(0, (dias(inicio, hoy) / dias(inicio, defensa)) * 100));
+      document.getElementById('stat-bar').style.width = `${pct}%`;
+
+      const actuales = pasos.filter((p) => estadoPaso(p) === 'en_curso');
+      actuales.sort((a, b) => parse(a.inicio) - parse(b.inicio));
+      const proximo = pasos.find((p) => estadoPaso(p) === 'pendiente');
+      const boxPaso = document.getElementById('now-paso');
+      if (actuales.length > 0) {
+        const p = actuales[actuales.length - 1];
+        const resto = dias(hoy, parse(p.fin));
+        const cuando = resto === 0 ? 'cierra hoy' : `cierra el ${fc(p.fin)}, ${resto === 1 ? 'falta 1 día' : `faltan ${resto} días`}`;
+        boxPaso.innerHTML = `<h2>Dónde estamos</h2><p><b>${p.id} · ${p.titulo}</b> ${cuando}.${proximo ? ` Después: ${proximo.titulo}, desde el ${fc(proximo.inicio)}.` : ''}</p>`;
+      } else if (proximo) {
+        boxPaso.innerHTML = `<h2>Dónde estamos</h2><p>Entre pasos. El próximo es <b>${proximo.id} · ${proximo.titulo}</b>, desde el ${fc(proximo.inicio)}.</p>`;
+      } else {
+        boxPaso.innerHTML = '<h2>Dónde estamos</h2><p>Todos los pasos están cerrados.</p>';
+      }
+
+      const boxBE = document.getElementById('now-be');
+      const pendientes = backend.filter((b) => !b.listo).sort((a, b) => parse(a.fecha) - parse(b.fecha));
+      if (pendientes.length === 0) {
+        boxBE.innerHTML = '<h2>Backend</h2><p>No queda backend bloqueante.</p>';
+        return;
+      }
+      const b = pendientes[0];
+      const est = estadoBE(b);
+      const destino = pasos.find((p) => p.id === b.desbloquea);
+      boxBE.classList.toggle('atrasado', est === 'atrasado');
+      const cuando = est === 'atrasado' ? `<b>atrasado</b> desde el ${fc(b.fecha)}` : `para el ${fc(b.fecha)}`;
+      boxBE.innerHTML = `<h2>Próximo bloqueante de backend</h2><p><b>${b.id} · ${b.titulo}</b>, ${cuando}. Desbloquea ${destino ? `${destino.id} · ${destino.titulo}` : b.desbloquea}.</p>`;
+    }
+
+    function lista() {
+      const ol = document.getElementById('list');
+      ol.innerHTML = pasos
+        .map((p) => {
+          const est = estadoPaso(p);
+          const rango = p.inicio === p.fin ? fc(p.inicio) : `${fc(p.inicio)} → ${fc(p.fin)}`;
+          const bloq = esperas(p)
+            .map((b) => `<li>${estadoBE(b) === 'listo' ? '✓' : '⛔'} ${b.id} · ${b.titulo} · ${fc(b.fecha)}</li>`)
+            .join('');
+          return `<li class="step ${est}"><div class="when">${p.icono} ${p.id} · ${rango} · ${p.equipo.join(', ')}</div>
+            <h3>${p.titulo}</h3><ul>${p.tareas.map((t) => `<li>${t}</li>`).join('')}${bloq}</ul></li>`;
+        })
+        .join('');
+    }
+
+    const svg = document.getElementById('road');
+    const pos = dibujarRuta(svg);
+    dibujarBackend(svg);
+    dibujarPasos(svg);
+    dibujarHoy(svg, pos);
+    encabezado();
+    lista();
+  </script>
+</body>
+</html>

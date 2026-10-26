@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abathur — Mockup por tipo de usuario</title>
+  <style>
+    :root {
+      --bg: #eef0f6;
+      --ink: #1d2140;
+      --muted: #646a8a;
+      --line: #dfe2ee;
+      --panel: #ffffff;
+      --brand: #2d3283;
+      --brand-soft: #e9ebfb;
+      --ok: #1f8a5b;
+      --ok-soft: #e3f5ec;
+      --warn: #a35a0c;
+      --warn-soft: #fff1dd;
+      --bad: #b23b3b;
+      --bad-soft: #fde8e8;
+      --info-soft: #e6f2fd;
+      --cliente: #1f8a5b;
+      --moderador: #b0620f;
+      --admin: #7a2fb0;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 14.5px/1.45 "Segoe UI", system-ui, sans-serif; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    code { font-family: Consolas, ui-monospace, monospace; font-size: 0.92em; background: #f0f1f7; padding: 0 4px; border-radius: 4px; }
+
+    /* Marco del mockup */
+    .top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; padding: 14px 22px; background: var(--ink); color: white; }
+    .top h1 { margin: 0; font-size: 18px; letter-spacing: 0.02em; }
+    .top h1 small { font-weight: 400; opacity: 0.7; margin-left: 8px; }
+    .roles { display: flex; gap: 6px; }
+    .roles button { border: 2px solid rgba(255, 255, 255, 0.35); background: transparent; color: white; padding: 6px 14px; border-radius: 99px; cursor: pointer; font-weight: 600; }
+    .roles button[aria-pressed="true"] { background: white; color: var(--ink); border-color: white; }
+    .roles button .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+
+    .layout { display: grid; grid-template-columns: 230px minmax(0, 1fr) 280px; gap: 18px; padding: 18px 22px 40px; max-width: 1600px; margin: 0 auto; }
+
+    .screens { position: sticky; top: 12px; align-self: start; background: var(--panel); border-radius: 14px; padding: 12px; border: 1px solid var(--line); }
+    .screens h2 { margin: 2px 6px 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .screens ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s; }
+    .screens li button { width: 100%; text-align: left; border: 0; background: transparent; padding: 7px 8px; border-radius: 8px; cursor: pointer; display: flex; gap: 8px; align-items: baseline; }
+    .screens li button::before { counter-increment: s; content: counter(s); font-size: 11px; font-weight: 700; color: var(--muted); min-width: 16px; }
+    .screens li button:hover { background: #f4f5fa; }
+    .screens li button[aria-current="page"] { background: var(--brand-soft); color: var(--brand); font-weight: 700; }
+    .screens .shared { font-size: 10.5px; color: var(--muted); margin-left: auto; font-weight: 400; }
+
+    .notes { position: sticky; top: 12px; align-self: start; background: var(--panel); border-radius: 14px; padding: 14px 16px; border: 1px solid var(--line); }
+    .notes h2 { margin: 0 0 2px; font-size: 16px; }
+    .notes .route { font-family: Consolas, ui-monospace, monospace; font-size: 12.5px; color: var(--brand); word-break: break-all; }
+    .notes h3 { margin: 14px 0 6px; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .notes ul { margin: 0; padding-left: 18px; }
+    .notes li { margin: 3px 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .chips span { font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #f0f1f7; }
+    .roleline { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .roleline span { font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 99px; color: white; }
+
+    /* Ventana del navegador */
+    .browser { background: var(--panel); border-radius: 14px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(29, 33, 64, 0.08); }
+    .chrome { display: flex; gap: 10px; align-items: center; padding: 9px 12px; background: #f6f7fb; border-bottom: 1px solid var(--line); }
+    .chrome .lights { display: flex; gap: 6px; }
+    .chrome .lights i { width: 11px; height: 11px; border-radius: 50%; background: #d7dae6; display: block; }
+    .chrome .url { flex: 1; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-family: Consolas, ui-monospace, monospace; font-size: 12.5px; color: var(--muted); }
+
+    /* App */
+    .app-nav { display: flex; align-items: center; gap: 18px; padding: 10px 20px; border-bottom: 1px solid var(--line); }
+    .brand { font-weight: 900; letter-spacing: 0.04em; color: var(--brand); }
+    .app-nav nav { display: flex; gap: 14px; flex-wrap: wrap; }
+    .app-nav nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+    .app-nav nav a.on { color: var(--brand); }
+    .user { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: white; font-weight: 800; font-size: 12px; }
+    .badge-role { font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 99px; color: white; }
+
+    .app { padding: 20px 22px 28px; min-height: 620px; }
+    .app h2 { margin: 0 0 4px; font-size: 22px; }
+    .app .lead { margin: 0 0 16px; color: var(--muted); }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .split { display: grid; grid-template-columns: 220px 1fr; gap: 18px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .main-aside { display: grid; grid-template-columns: 1fr 300px; gap: 18px; }
+
+    .box { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: white; }
+    .box h3 { margin: 0 0 8px; font-size: 15px; }
+    .muted { color: var(--muted); }
+    .small { font-size: 12.5px; }
+
+    .btn { border: 1px solid var(--brand); background: var(--brand); color: white; padding: 7px 14px; border-radius: 9px; cursor: pointer; font-weight: 600; }
+    .btn.ghost { background: white; color: var(--brand); }
+    .btn.ok { background: var(--ok); border-color: var(--ok); }
+    .btn.bad { background: var(--bad); border-color: var(--bad); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .field { display: grid; gap: 4px; margin-bottom: 12px; }
+    .field label { font-weight: 600; font-size: 13px; }
+    .field input, .field select, .field textarea { border: 1px solid #cfd3e3; border-radius: 9px; padding: 7px 10px; background: white; width: 100%; }
+    .field textarea { min-height: 90px; resize: vertical; }
+    .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--bad); background: #fffafa; }
+    .err { color: var(--bad); font-size: 12.5px; }
+
+    .pill { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+    .s-abierta { background: #eceef4; color: #444a6a; }
+    .s-en_votacion { background: var(--info-soft); color: #1b5e9b; }
+    .s-recomendada { background: var(--ok-soft); color: var(--ok); }
+    .s-desaconsejada { background: #f6e6dc; color: #8f4520; }
+    .s-controvertida { background: var(--warn-soft); color: var(--warn); }
+    .s-aceptada { background: #d6f0e1; color: #135f3d; }
+    .s-rechazada { background: var(--bad-soft); color: var(--bad); }
+    .s-publicado { background: var(--ok-soft); color: var(--ok); }
+    .s-revision { background: var(--warn-soft); color: var(--warn); }
+
+    .banner { border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; display: flex; gap: 10px; align-items: flex-start; }
+    .banner.warn { background: var(--warn-soft); color: #6d3c06; }
+    .banner.info { background: var(--info-soft); color: #174d7f; }
+    .banner.ok { background: var(--ok-soft); color: #145c3c; }
+    .banner.bad { background: var(--bad-soft); color: #7d2525; }
+
+    .list { display: grid; gap: 8px; }
+    .item { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; cursor: pointer; background: white; }
+    .item:hover { border-color: #b8bdd6; }
+    .item h4 { margin: 0; font-size: 15.5px; }
+
+    .tree { list-style: none; margin: 0; padding: 0; }
+    .tree ul { list-style: none; margin: 2px 0 2px 14px; padding: 0; border-left: 1px dashed #cfd3e3; }
+    .tree li { padding: 3px 0 3px 8px; }
+    .tree a { cursor: pointer; color: var(--ink); text-decoration: none; }
+    .tree a.on { font-weight: 700; color: var(--brand); }
+    .count { color: var(--muted); font-size: 12px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .diff { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-family: Consolas, ui-monospace, monospace; font-size: 12.5px; }
+    .diff .col h5 { margin: 0; padding: 6px 10px; background: #f6f7fb; font: 700 12px "Segoe UI", sans-serif; color: var(--muted); border-bottom: 1px solid var(--line); }
+    .diff .col + .col { border-left: 1px solid var(--line); }
+    .diff .l { padding: 3px 10px; white-space: pre-wrap; }
+    .diff .del { background: #fde8e8; }
+    .diff .add { background: #e3f5ec; }
+    .diff .gap { background: #fafafa; color: transparent; }
+
+    .comment { border-top: 1px solid var(--line); padding: 10px 0; }
+    .comment b { margin-right: 6px; }
+
+    .tally { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+    .tally div { background: #f6f7fb; border-radius: 10px; padding: 8px 10px; text-align: center; }
+    .tally b { display: block; font-size: 20px; }
+    .meter { height: 10px; border-radius: 99px; background: #f0d5d5; overflow: hidden; display: flex; }
+    .meter i { display: block; height: 100%; background: var(--ok); transition: width 0.2s; }
+    .quorum { display: flex; gap: 6px; margin: 8px 0; }
+    .quorum i { flex: 1; height: 8px; border-radius: 99px; background: #e2e4ee; }
+    .quorum i.on { background: var(--brand); }
+    .quorum i.preview { background: repeating-linear-gradient(45deg, var(--brand), var(--brand) 4px, #9ca1d6 4px, #9ca1d6 8px); }
+    .choice { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+    .choice button { border: 2px solid var(--line); background: white; border-radius: 10px; padding: 9px; cursor: pointer; font-weight: 700; }
+    .choice button[aria-pressed="true"].f { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+    .choice button[aria-pressed="true"].c { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+    .votes { list-style: none; margin: 0; padding: 0; }
+    .votes li { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
+    .votes li.draft { color: var(--muted); font-style: italic; }
+
+    .score { font-size: 42px; font-weight: 900; color: var(--brand); line-height: 1; }
+    .delta-p { color: var(--ok); font-weight: 700; }
+    .delta-n { color: var(--bad); font-weight: 700; }
+
+    .radio { display: grid; gap: 8px; margin: 6px 0 12px; }
+    .radio label { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--line); border-radius: 10px; padding: 9px 12px; cursor: pointer; }
+    .radio label:has(input:checked) { border-color: var(--brand); background: var(--brand-soft); }
+
+    .tagrow { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tag { font-size: 11.5px; padding: 1px 8px; border-radius: 6px; background: #f0f1f7; color: #444a6a; }
+
+    .empty { text-align: center; color: var(--muted); border: 1px dashed #cfd3e3; border-radius: 12px; padding: 18px; }
+
+    .screen { display: none; }
+    .screen.on { display: block; }
+    [data-only] { display: none; }
+    body[data-role="cliente"] [data-only~="cliente"],
+    body[data-role="moderador"] [data-only~="moderador"],
+    body[data-role="admin"] [data-only~="admin"] { display: revert; }
+
+    @media (max-width: 1250px) {
+      .layout { grid-template-columns: 210px minmax(0, 1fr); }
+      .notes { grid-column: 1 / -1; position: static; }
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .screens { position: static; }
+      .split, .two, .main-aside, .diff { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-role="cliente">
+  <header class="top">
+    <h1>Abathur · mockup <small>datos de ejemplo, sin backend</small></h1>
+    <div class="roles" role="group" aria-label="Tipo de usuario">
+      <button type="button" data-role-btn="cliente" aria-pressed="true"><i class="dot" style="background: var(--cliente)"></i>Cliente</button>
+      <button type="button" data-role-btn="moderador" aria-pressed="false"><i class="dot" style="background: var(--moderador)"></i>Moderador</button>
+      <button type="button" data-role-btn="admin" aria-pressed="false"><i class="dot" style="background: var(--admin)"></i>Administrador</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="screens">
+      <h2 id="screens-title">Pantallas</h2>
+      <ol id="screen-list"></ol>
+    </aside>
+
+    <div class="browser">
+      <div class="chrome">
+        <div class="lights"><i></i><i></i><i></i></div>
+        <div class="url" id="url"></div>
+      </div>
+
+      <div class="app-nav" id="app-nav">
+        <span class="brand">ABATHUR</span>
+        <nav>
+          <a data-go="articulos">Artículos</a>
+          <a data-go="propuestas">Propuestas</a>
+          <a data-go="bandeja" data-only="moderador">Por votar</a>
+          <a data-go="reputacion">Reputación</a>
+          <a data-go="categorias" data-only="admin">Categorías</a>
+          <a data-go="usuarios" data-only="admin">Usuarios</a>
+          <a data-go="auditoria" data-only="admin">Auditoría</a>
+        </nav>
+        <div class="user">
+          <span id="user-name"></span>
+          <span class="badge-role" id="user-role"></span>
+          <span class="avatar" id="user-avatar"></span>
+        </div>
+      </div>
+
+      <main class="app">
+
+        <!-- Ingreso -->
+        <section class="screen" data-id="ingreso" data-roles="cliente moderador admin" data-title="Ingreso" data-route="/ingreso"
+          data-temas="Formularios|HTTP|Rutas" data-tarjetas="F-07"
+          data-notas="Formulario reactivo con validación de campos obligatorios.|Error de credenciales con @if, leído con readApiError.|Sin sesión, authGuard redirige acá. La barra de navegación no se muestra.">
+          <div style="max-width: 380px; margin: 40px auto;">
+            <h2>Ingresar</h2>
+            <p class="lead">Las cuentas las crea el administrador.</p>
+            <div class="banner bad small">Usuario o contraseña incorrectos.</div>
+            <div class="field">
+              <label for="u">Usuario</label>
+              <input id="u" value="ana">
+            </div>
+            <div class="field invalid">
+              <label for="p">Contraseña</label>
+              <input id="p" type="password" value="">
+              <span class="err">La contraseña es obligatoria.</span>
+            </div>
+            <button class="btn" type="button" disabled>Ingresar</button>
+          </div>
+        </section>
+
+        <!-- Artículos -->
+        <section class="screen" data-id="articulos" data-roles="cliente moderador admin" data-title="Artículos" data-route="/articulos?q=caja&categoria=operacion"
+          data-temas="HTTP|Control de flujo|Formularios|Directivas|Pipes" data-tarjetas="F-10 F-11 F-13 F-14"
+          data-notas="@for con track sobre los artículos y @empty cuando la búsqueda no encuentra nada.|El árbol de categorías es un componente que se renderiza a sí mismo.|La búsqueda y el filtro quedan en los query params.|“En revisión” sale de appAvisoRevision y del pipe estadoArticulo.|El botón Nuevo artículo solo existe para admin (appHasRole).">
+          <div class="row" style="justify-content: space-between; margin-bottom: 14px;">
+            <div>
+              <h2>Artículos</h2>
+              <p class="lead" style="margin: 0;">Procedimientos y criterios de Ferretería Del Sur.</p>
+            </div>
+            <button class="btn" type="button" data-only="admin" data-go="nuevo-articulo">+ Nuevo artículo</button>
+          </div>
+          <div class="split">
+            <div class="box">
+              <h3>Categorías</h3>
+              <ul class="tree">
+                <li><a>Todas</a> <span class="count">12</span></li>
+                <li><a class="on">Operación</a> <span class="count">7</span>
+                  <ul>
+                    <li><a>Caja</a> <span class="count">3</span></li>
+                    <li><a>Turnos</a> <span class="count">2</span></li>
+                    <li><a>Depósito</a> <span class="count">2</span></li>
+                  </ul>
+                </li>
+                <li><a>Seguridad</a> <span class="count">3</span></li>
+                <li><a>Atención al cliente</a> <span class="count">2</span></li>
+              </ul>
+            </div>
+            <div>
+              <div class="row" style="margin-bottom: 12px;">
+                <input style="flex: 1; border: 1px solid #cfd3e3; border-radius: 9px; padding: 8px 12px;" value="caja" aria-label="Buscar">
+                <button class="btn ghost" type="button">Buscar</button>
+              </div>
+              <div class="list">
+                <div class="item" data-go="articulo">
+                  <div class="row" style="justify-content: space-between;"><h4>Apertura de caja</h4><span class="pill s-revision">En revisión</span></div>
+                  <span class="muted">Pasos para abrir la caja al inicio del turno y registrar el fondo fijo.</span>
+                  <div class="row small muted"><span>Operación › Caja</span><span>· versión 2 · 14/10/2026</span></div>
+                </div>
+                <div class="item" data-go="articulo">
+                  <div class="row" style="justify-content: space-between;"><h4>Cierre de caja con diferencia</h4><span class="pill s-publicado">Publicado</span></div>
+                  <span class="muted">Qué hacer si el arqueo no coincide con el sistema.</span>
+                  <div class="row small muted"><span>Operación › Caja</span><span>· versión 1 · 02/10/2026</span></div>
+                </div>
+                <div class="item" data-go="articulo">
+                  <div class="row" style="justify-content: space-between;"><h4>Devoluciones con ticket de caja</h4><span class="pill s-publicado">Publicado</span></div>
+                  <span class="muted">Cuándo aceptar una devolución y cómo registrarla.</span>
+                  <div class="row small muted"><span>Atención al cliente</span><span>· versión 3 · 21/09/2026</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Detalle de artículo -->
+        <section class="screen" data-id="articulo" data-roles="cliente moderador admin" data-title="Detalle de artículo" data-route="/articulos/apertura-de-caja"
+          data-temas="Rutas|HTTP|Directivas" data-tarjetas="F-12 F-13"
+          data-notas="El artículo sale del parámetro :articleId.|El campo content llega como Markdown y esta vista lo arma con bloques tipados: encabezado y lista. No hay innerHTML.|El aviso de revisión no oculta el contenido: el artículo sigue vigente.|Cliente y moderador ven Proponer modificación. Admin ve las propuestas abiertas.">
+          <div class="banner warn">
+            <span>⚠️</span>
+            <div><b>Este artículo está en revisión.</b> Hay una propuesta en votación. El contenido de abajo sigue siendo el vigente. <a style="cursor:pointer; text-decoration: underline;" data-go="propuesta">Ver propuesta</a></div>
+          </div>
+          <div class="main-aside">
+            <article>
+              <div class="small muted">Operación › Caja</div>
+              <h2>Apertura de caja</h2>
+              <p class="lead">Pasos para abrir la caja al inicio del turno y registrar el fondo fijo.</p>
+              <h3>Pasos</h3>
+              <ul>
+                <li>Retirar el fondo fijo de la caja fuerte con el encargado presente.</li>
+                <li>Contar el fondo fijo: debe sumar $20.000.</li>
+                <li>Registrar la apertura en el sistema con el usuario del turno.</li>
+                <li>Si falta dinero, avisar al encargado antes de abrir.</li>
+              </ul>
+              <div class="tagrow"><span class="tag">caja</span><span class="tag">apertura</span><span class="tag">turno mañana</span></div>
+            </article>
+            <aside class="box">
+              <h3>Versión vigente</h3>
+              <p class="small" style="margin: 0 0 8px;">Versión 2 · publicada por Lucía el 14/10/2026.<br><span class="muted">“Se agregó el aviso al encargado.”</span></p>
+              <button class="btn ghost" type="button" data-go="versiones">Ver historial</button>
+              <h3 style="margin-top: 14px;">Fuentes</h3>
+              <ul class="small" style="margin: 0; padding-left: 18px;"><li><a href="#" onclick="return false">Manual interno de caja 2025</a></li></ul>
+              <div style="margin-top: 14px;" data-only="cliente moderador"><button class="btn" type="button" data-go="proponer">Proponer modificación</button></div>
+              <div style="margin-top: 14px;" data-only="admin"><button class="btn" type="button" data-go="propuestas">1 propuesta abierta</button></div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Historial -->
+        <section class="screen" data-id="versiones" data-roles="cliente moderador admin" data-title="Historial de versiones" data-route="/articulos/apertura-de-caja/versiones"
+          data-temas="Rutas|Pipes|Control de flujo" data-tarjetas="F-15"
+          data-notas="Las versiones son inmutables: no hay botón de editar.|La vigente queda destacada.|Las fechas llegan como string ISO y se muestran con DatePipe es-AR.">
+          <h2>Apertura de caja · historial</h2>
+          <p class="lead">Cada publicación crea una versión nueva. Las anteriores se conservan.</p>
+          <table>
+            <thead><tr><th>Versión</th><th>Publicada</th><th>Por</th><th>Resumen de cambios</th></tr></thead>
+            <tbody>
+              <tr style="background: var(--ok-soft);"><td><b>v2</b> <span class="pill s-publicado">Vigente</span></td><td>14/10/2026</td><td>Lucía</td><td>Se agregó el aviso al encargado si falta dinero.</td></tr>
+              <tr><td>v1</td><td>01/09/2026</td><td>Lucía</td><td>Versión inicial.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Proponer -->
+        <section class="screen" data-id="proponer" data-roles="cliente moderador" data-title="Proponer modificación" data-route="/articulos/apertura-de-caja/proponer"
+          data-temas="Formularios|HTTP" data-tarjetas="F-18"
+          data-notas="Mismo formulario reactivo para crear o modificar. Acá guarda la versión de base (v2).|El textarea envía Markdown. Una etiqueta HTML no pasa el validador.|Las fuentes son un FormArray: se agregan y quitan filas.|Los errores aparecen al tocar el campo o al intentar enviar.">
+          <h2>Proponer modificación</h2>
+          <p class="lead">Sobre <b>Apertura de caja · versión 2</b>. La propuesta no cambia el artículo hasta que el administrador decida.</p>
+          <div class="two">
+            <div>
+              <div class="field"><label>Título</label><input value="Apertura de caja"></div>
+              <div class="field"><label>Resumen</label><input value="Pasos para abrir la caja al inicio del turno y registrar el fondo fijo."></div>
+              <div class="field"><label>Contenido · Markdown</label><textarea>## Pasos
+
+- Retirar el fondo fijo de la caja fuerte con el encargado presente.
+- Contar el fondo fijo: debe sumar $25.000.
+- Registrar la apertura en el sistema con el usuario del turno.
+- Si falta dinero, avisar al encargado y anotarlo en la planilla.</textarea></div>
+            </div>
+            <div>
+              <div class="field invalid"><label>Motivo del cambio</label><textarea placeholder="¿Por qué hay que cambiarlo?"></textarea><span class="err">Contá por qué hace falta el cambio (mínimo 20 caracteres).</span></div>
+              <div class="field"><label>Etiquetas</label><input value="caja, apertura, turno mañana"></div>
+              <div class="field">
+                <label>Fuentes <span class="muted small">(opcional)</span></label>
+                <div class="row" style="margin-bottom: 6px;"><input style="flex: 1; border: 1px solid #cfd3e3; border-radius: 9px; padding: 7px 10px;" value="Circular de tesorería 10/2026"><input style="flex: 1; border: 1px solid #cfd3e3; border-radius: 9px; padding: 7px 10px;" value="https://intranet/circular-10"><button class="btn ghost" type="button">Quitar</button></div>
+                <button class="btn ghost" type="button" style="justify-self: start;">+ Agregar fuente</button>
+              </div>
+            </div>
+          </div>
+          <div class="row"><button class="btn" type="button" disabled>Enviar propuesta</button><button class="btn ghost" type="button" data-go="articulo">Cancelar</button></div>
+        </section>
+
+        <!-- Listado de propuestas -->
+        <section class="screen" data-id="propuestas" data-roles="cliente moderador admin" data-title="Propuestas" data-route="/propuestas?estado=en_votacion"
+          data-temas="Control de flujo|Pipes|HTTP" data-tarjetas="F-16 F-09"
+          data-notas="El filtro usa los literales de ProposalStatus.|Cada estado se muestra con el pipe estadoPropuesta.|Admin ve además qué propuestas esperan su decisión.">
+          <div class="row" style="justify-content: space-between;">
+            <h2>Propuestas</h2>
+            <button class="btn" type="button" data-only="cliente moderador">+ Proponer artículo nuevo</button>
+          </div>
+          <div class="banner info small" data-only="admin" style="margin-top: 10px;">3 propuestas esperan tu decisión: 1 recomendada, 1 controvertida y 1 sin quórum.</div>
+          <div class="row" style="margin: 10px 0 14px;">
+            <span class="pill s-abierta">Abierta · 2</span>
+            <span class="pill s-en_votacion" style="outline: 2px solid #1b5e9b;">En votación · 1</span>
+            <span class="pill s-recomendada">Recomendada · 1</span>
+            <span class="pill s-desaconsejada">Desaconsejada · 0</span>
+            <span class="pill s-controvertida">Controvertida · 1</span>
+            <span class="pill s-aceptada">Aceptada · 4</span>
+            <span class="pill s-rechazada">Rechazada · 2</span>
+          </div>
+          <div class="list">
+            <div class="item" data-go="propuesta">
+              <div class="row" style="justify-content: space-between;"><h4>Modificación · Apertura de caja</h4><span class="pill s-en_votacion">En votación</span></div>
+              <span class="muted">“El fondo fijo pasó a $25.000 según la circular de octubre.”</span>
+              <div class="row small muted"><span>Por Ana · 22/10/2026</span><span>· 2 de 3 votos</span><span>· 3 comentarios</span></div>
+            </div>
+            <div class="item" data-go="decision">
+              <div class="row" style="justify-content: space-between;"><h4>Nuevo artículo · Corte de luz en el local</h4><span class="pill s-recomendada">Recomendada</span></div>
+              <span class="muted">“No hay nada escrito sobre qué hacer con las cajas y la alarma.”</span>
+              <div class="row small muted"><span>Por Tomás · 18/10/2026</span><span>· 3 votos · 7 a 1</span></div>
+            </div>
+            <div class="item">
+              <div class="row" style="justify-content: space-between;"><h4>Modificación · Cambio de turno</h4><span class="pill s-controvertida">Controvertida</span></div>
+              <span class="muted">“El relevo debería hacerse con conteo de caja, no solo firma.”</span>
+              <div class="row small muted"><span>Por Marcos · 15/10/2026</span><span>· 3 votos · 4 a 4</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bandeja de votación -->
+        <section class="screen" data-id="bandeja" data-roles="moderador" data-title="Por votar" data-route="/propuestas?estado=en_votacion&amp;pendienteDeMiVoto=true"
+          data-temas="Rutas|Control de flujo|Pipes|Signals" data-tarjetas="F-16 F-21 F-25"
+          data-notas="Es el listado de propuestas con query params: no hace falta otra ruta.|Abrir votación solo aparece para moderador y admin (appHasRole).|El peso que se muestra sale de VoteWeightPolicy con tu reputación actual; el que vale es el que guarda el servidor.">
+          <div class="row" style="justify-content: space-between;">
+            <div>
+              <h2>Por votar</h2>
+              <p class="lead" style="margin: 0;">Tu peso hoy: <b>3</b> (reputación 30). Se congela al votar.</p>
+            </div>
+          </div>
+          <h3 style="margin: 18px 0 8px; font-size: 15px;">Esperan tu voto</h3>
+          <div class="list">
+            <div class="item" data-go="propuesta">
+              <div class="row" style="justify-content: space-between;"><h4>Modificación · Apertura de caja</h4><span class="pill s-en_votacion">En votación</span></div>
+              <div class="quorum" style="max-width: 220px;"><i class="on"></i><i class="on"></i><i></i></div>
+              <div class="row small muted"><span>2 de 3 votos · falta uno para el quórum</span><span>· abierta hace 3 días</span></div>
+            </div>
+          </div>
+          <h3 style="margin: 18px 0 8px; font-size: 15px;">Abiertas, sin votación</h3>
+          <div class="list">
+            <div class="item">
+              <div class="row" style="justify-content: space-between;"><h4>Nuevo artículo · Préstamo de herramientas a clientes</h4><span class="pill s-abierta">Abierta</span></div>
+              <div class="row small muted"><span>Por Marcos · 24/10/2026 · 1 comentario</span></div>
+              <div><button class="btn ghost" type="button">Abrir votación</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Detalle de propuesta (cliente / admin: sin voto) -->
+        <section class="screen" data-id="propuesta" data-roles="cliente moderador admin" data-title="Detalle de propuesta" data-route="/propuestas/p-104"
+          data-temas="Control de flujo|Pipes|Formularios|Signals" data-tarjetas="F-17 F-19 F-20 F-23 F-24"
+          data-notas="@switch por estado: este es el caso en_votacion.|El diff compara contra la versión de base con el pipe diffLineas.|Comentarios con formulario template-driven (ngModel).|Cliente ve el conteo, sin votar. El panel de voto solo existe para moderador.|Moderador: elegir un voto mueve la previa al instante (signal + computed).">
+          <div class="row" style="justify-content: space-between; margin-bottom: 6px;">
+            <div>
+              <div class="small muted">Modificación de <a style="cursor:pointer; text-decoration: underline;" data-go="articulo">Apertura de caja</a> · base: versión 2</div>
+              <h2>El fondo fijo pasó a $25.000</h2>
+            </div>
+            <span class="pill s-en_votacion" style="font-size: 13px;">En votación</span>
+          </div>
+          <p class="muted" style="margin-top: 0;">Propuesta por <a style="cursor:pointer; text-decoration: underline;" data-go="reputacion">Ana</a> el 22/10/2026 · “Según la circular de tesorería de octubre, el fondo fijo ahora es de $25.000 y los faltantes se anotan en planilla.”</p>
+
+          <div class="main-aside">
+            <div>
+              <div class="diff">
+                <div class="col">
+                  <h5>Versión 2 (vigente)</h5>
+                  <div class="l">## Pasos</div>
+                  <div class="l">- Retirar el fondo fijo de la caja fuerte con el encargado presente.</div>
+                  <div class="l del">- Contar el fondo fijo: debe sumar $20.000.</div>
+                  <div class="l">- Registrar la apertura en el sistema con el usuario del turno.</div>
+                  <div class="l del">- Si falta dinero, avisar al encargado antes de abrir.</div>
+                </div>
+                <div class="col">
+                  <h5>Propuesta</h5>
+                  <div class="l">## Pasos</div>
+                  <div class="l">- Retirar el fondo fijo de la caja fuerte con el encargado presente.</div>
+                  <div class="l add">- Contar el fondo fijo: debe sumar $25.000.</div>
+                  <div class="l">- Registrar la apertura en el sistema con el usuario del turno.</div>
+                  <div class="l add">- Si falta dinero, avisar al encargado y anotarlo en la planilla.</div>
+                </div>
+              </div>
+
+              <div class="box" style="margin-top: 14px;">
+                <h3>Debate · 3 comentarios</h3>
+                <div class="comment"><b>Raúl</b><span class="small muted">23/10</span><div>¿La circular aplica también a la sucursal Norte?</div></div>
+                <div class="comment"><b>Ana</b><span class="small muted">23/10</span><div>Sí, es para todas las cajas. Dejé el link en fuentes.</div></div>
+                <div class="comment"><b>Sofía</b><span class="small muted">24/10</span><div>Ojo que la planilla de faltantes todavía no está en el depósito.</div></div>
+                <div class="field" style="margin: 10px 0 8px;"><label>Tu comentario</label><textarea placeholder="Sumá información o una objeción…" style="min-height: 60px;"></textarea></div>
+                <button class="btn ghost" type="button" disabled>Comentar</button>
+              </div>
+            </div>
+
+            <aside>
+              <div class="box">
+                <h3>Votación de moderadores</h3>
+                <div class="quorum" id="v-quorum"><i></i><i></i><i></i></div>
+                <div class="small muted" id="v-quorum-text"></div>
+                <div class="tally">
+                  <div><span class="small muted">A favor</span><b id="v-favor" style="color: var(--ok);"></b></div>
+                  <div><span class="small muted">En contra</span><b id="v-contra" style="color: var(--bad);"></b></div>
+                  <div><span class="small muted">Resultado</span><b id="v-result" style="font-size: 13px; padding-top: 6px;"></b></div>
+                </div>
+                <div class="meter"><i id="v-meter"></i></div>
+                <ul class="votes" id="v-list" style="margin-top: 10px;"></ul>
+
+                <div data-only="moderador" style="margin-top: 12px;">
+                  <div id="v-form">
+                    <div class="small"><b>Tu voto</b> · Tomás · reputación 30 · peso <b>3</b></div>
+                    <div class="choice">
+                      <button type="button" class="f" data-vote="a_favor" aria-pressed="false">A favor</button>
+                      <button type="button" class="c" data-vote="en_contra" aria-pressed="false">En contra</button>
+                    </div>
+                    <div class="small muted" id="v-hint">Elegí una opción para ver la vista previa.</div>
+                    <button class="btn" type="button" id="v-confirm" disabled style="width: 100%; margin-top: 8px;">Confirmar voto</button>
+                  </div>
+                  <div class="banner ok small" id="v-done" hidden style="margin: 8px 0 0;">Voto registrado con peso 3. No se puede modificar.</div>
+                  <button class="btn ghost" type="button" id="v-close" disabled style="width: 100%; margin-top: 8px;">Cerrar votación</button>
+                </div>
+                <div data-only="cliente" class="small muted" style="margin-top: 10px;">Solo los moderadores votan. El resultado es una recomendación; la decisión final es del administrador.</div>
+                <div data-only="admin" class="small muted" style="margin-top: 10px;">Podés resolverla sin esperar el tercer voto. Quedaría como decisión excepcional, con motivo obligatorio.</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Reputación -->
+        <section class="screen" data-id="reputacion" data-roles="cliente moderador admin" data-title="Reputación" data-route="/personas/ana/reputacion"
+          data-temas="Signals|Rutas|Control de flujo" data-tarjetas="F-29 F-30"
+          data-notas="El puntaje es un computed: la suma de los delta de los eventos.|Publicar, comentar o votar no suma; solo cuentan eventos con origen.|Admin puede registrar una conducta abusiva con motivo.">
+          <div class="main-aside">
+            <div>
+              <h2>Ana · reputación</h2>
+              <p class="lead">Cada cambio queda registrado con su origen.</p>
+              <table>
+                <thead><tr><th>Fecha</th><th>Evento</th><th>Origen</th><th>Delta</th></tr></thead>
+                <tbody>
+                  <tr><td>18/10/2026</td><td>Aporte respaldado</td><td>Propuesta p-097 aceptada</td><td class="delta-p">+5</td></tr>
+                  <tr><td>05/10/2026</td><td>Aporte respaldado</td><td>Propuesta p-081 aceptada</td><td class="delta-p">+5</td></tr>
+                  <tr><td>01/09/2026</td><td>Asignación inicial</td><td>Alta de cuenta</td><td class="delta-p">+10</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="box">
+              <span class="small muted">Puntaje</span>
+              <div class="score">20</div>
+              <p class="small muted">Si fuera moderadora, su peso de voto sería <b>2</b> (tope 5).</p>
+              <div data-only="admin">
+                <hr style="border: 0; border-top: 1px solid var(--line);">
+                <div class="field"><label>Registrar conducta abusiva (−8)</label><textarea placeholder="Motivo obligatorio" style="min-height: 60px;"></textarea></div>
+                <button class="btn bad" type="button" disabled>Registrar</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Decisión administrativa -->
+        <section class="screen" data-id="decision" data-roles="admin" data-title="Decisión administrativa" data-route="/admin/propuestas/p-091/decision"
+          data-temas="Formularios|Control de flujo|Signals|HTTP" data-tarjetas="F-28"
+          data-notas="Validador cruzado: el motivo pasa a obligatorio si la decisión se aparta del resultado comunitario.|El resultado comunitario se lee del VoteTallyStore.|Aceptar crea la versión nueva y los eventos de reputación; todo queda en auditoría.|Probá elegir Rechazar.">
+          <div class="small muted">Nuevo artículo · propuesto por Tomás el 18/10/2026</div>
+          <h2>Corte de luz en el local</h2>
+          <div class="banner ok" style="margin-top: 10px;"><span>🗳️</span><div><b>Resultado comunitario: recomendada.</b> 3 votos · 7 a favor, 1 en contra. Es una recomendación; la decisión es tuya.</div></div>
+          <div class="two">
+            <div class="box">
+              <h3>Contenido propuesto</h3>
+              <p class="small" style="margin: 0;">Categoría: Seguridad</p>
+              <h4>Durante el corte</h4>
+              <ul class="small">
+                <li>Cerrar las cajas y guardar el efectivo en la caja fuerte.</li>
+                <li>Verificar que la alarma pase a batería.</li>
+                <li>Avisar al encargado y anotar la hora del corte.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="radio" id="d-radio">
+                <label><input type="radio" name="d" value="aceptar" checked> <span><b>Aceptar y publicar</b><br><span class="small muted">Crea la versión 1 del artículo. Tomás suma +5.</span></span></label>
+                <label><input type="radio" name="d" value="rechazar"> <span><b>Rechazar</b><br><span class="small muted">La propuesta queda rechazada. Nada se publica.</span></span></label>
+              </div>
+              <div class="banner info small" id="d-kind">Decisión acorde al resultado comunitario.</div>
+              <div class="field" id="d-field">
+                <label for="d-motivo">Motivo <span class="muted small" id="d-opt">(opcional)</span></label>
+                <textarea id="d-motivo" placeholder="Queda registrado en la auditoría."></textarea>
+                <span class="err" id="d-err" hidden>Si te apartás del resultado comunitario, el motivo es obligatorio.</span>
+              </div>
+              <button class="btn" type="button" id="d-submit">Confirmar decisión</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Nuevo artículo -->
+        <section class="screen" data-id="nuevo-articulo" data-roles="admin" data-title="Nuevo artículo" data-route="/articulos/nuevo"
+          data-temas="Formularios|Rutas|HTTP" data-tarjetas="F-26"
+          data-notas="Ruta protegida con roleGuard: solo admin.|El contenido se publica como Markdown y queda guardado en la versión 1.|Al guardar, el artículo nace con su versión 1.">
+          <h2>Nuevo artículo</h2>
+          <p class="lead">Se publica directamente como versión 1.</p>
+          <div class="two">
+            <div>
+              <div class="field"><label>Título</label><input value="Recepción de mercadería"></div>
+              <div class="field"><label>Resumen</label><input value="Controles al recibir un pedido del proveedor."></div>
+              <div class="field"><label>Contenido · Markdown</label><textarea>## Al recibir el pedido
+
+- Comparar el remito con la orden de compra.
+- Contar bultos antes de firmar.</textarea></div>
+            </div>
+            <div>
+              <div class="field"><label>Categoría</label><select><option>Operación › Depósito</option><option>Operación › Caja</option><option>Seguridad</option></select></div>
+              <div class="field"><label>Etiquetas</label><input value="depósito, proveedores"></div>
+              <div class="field"><label>Resumen de cambios</label><input value="Versión inicial."></div>
+            </div>
+          </div>
+          <button class="btn" type="button">Publicar versión 1</button>
+        </section>
+
+        <!-- Categorías -->
+        <section class="screen" data-id="categorias" data-roles="admin" data-title="Categorías" data-route="/categorias"
+          data-temas="Formularios|Control de flujo" data-tarjetas="F-14 F-27"
+          data-notas="Mismo árbol recursivo que el listado de artículos.|Validador propio: una categoría no puede tener como padre a sí misma ni a una descendiente.">
+          <h2>Categorías</h2>
+          <div class="two" style="margin-top: 12px;">
+            <div class="box">
+              <ul class="tree">
+                <li><a class="on">Operación</a>
+                  <ul><li><a>Caja</a></li><li><a>Turnos</a></li><li><a>Depósito</a></li></ul>
+                </li>
+                <li><a>Seguridad</a></li>
+                <li><a>Atención al cliente</a></li>
+              </ul>
+            </div>
+            <div class="box">
+              <h3>Editar “Operación”</h3>
+              <div class="field"><label>Nombre</label><input value="Operación"></div>
+              <div class="field"><label>Descripción</label><input value="Tareas diarias del local."></div>
+              <div class="field invalid"><label>Categoría padre</label><select><option>Operación › Caja</option><option>Ninguna</option></select><span class="err">No puede depender de una de sus subcategorías.</span></div>
+              <button class="btn" type="button" disabled>Guardar</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Usuarios -->
+        <section class="screen" data-id="usuarios" data-roles="admin" data-title="Usuarios" data-route="/admin/usuarios"
+          data-temas="Formularios|HTTP|Control de flujo" data-tarjetas="F-32"
+          data-notas="Un rol por cuenta.|Desactivar impide ingresar y conserva votos, eventos y auditoría.|El alta crea el evento de reputación inicial.">
+          <div class="main-aside">
+            <div>
+              <h2>Usuarios</h2>
+              <table>
+                <thead><tr><th>Seudónimo</th><th>Usuario</th><th>Rol</th><th>Reputación</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td>Lucía</td><td>lucia</td><td>admin</td><td>—</td><td>Activa</td><td></td></tr>
+                  <tr><td>Tomás</td><td>tomas</td><td>moderador</td><td>30 · peso 3</td><td>Activo</td><td><button class="btn ghost" type="button">Desactivar</button></td></tr>
+                  <tr><td>Sofía</td><td>sofia</td><td>moderador</td><td>30 · peso 3</td><td>Activa</td><td><button class="btn ghost" type="button">Desactivar</button></td></tr>
+                  <tr><td>Raúl</td><td>raul</td><td>moderador</td><td>10 · peso 1</td><td>Activo</td><td><button class="btn ghost" type="button">Desactivar</button></td></tr>
+                  <tr><td>Ana</td><td>ana</td><td>cliente</td><td>20</td><td>Activa</td><td><button class="btn ghost" type="button">Desactivar</button></td></tr>
+                  <tr class="muted"><td>Marcos</td><td>marcos</td><td>cliente</td><td>10</td><td>Desactivado</td><td><button class="btn ghost" type="button">Reactivar</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="box">
+              <h3>Nueva cuenta</h3>
+              <div class="field"><label>Seudónimo visible</label><input value="Julieta"></div>
+              <div class="field"><label>Usuario</label><input value="julieta"></div>
+              <div class="field"><label>Rol</label><select><option>cliente</option><option>moderador</option></select></div>
+              <div class="field"><label>Reputación inicial</label><input type="number" value="10"></div>
+              <button class="btn" type="button">Crear cuenta</button>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Auditoría -->
+        <section class="screen" data-id="auditoria" data-roles="admin" data-title="Auditoría" data-route="/admin/auditoria"
+          data-temas="Control de flujo|HTTP|Pipes" data-tarjetas="F-33"
+          data-notas="Las decisiones apartadas y las excepcionales se distinguen del consenso.|Los registros se conservan aunque la cuenta se desactive.">
+          <h2>Auditoría</h2>
+          <p class="lead">Decisiones administrativas y acciones críticas.</p>
+          <table>
+            <thead><tr><th>Fecha</th><th>Actor</th><th>Acción</th><th>Sobre</th><th>Tipo</th><th>Motivo</th></tr></thead>
+            <tbody>
+              <tr><td>24/10 17:40</td><td>Lucía</td><td>Rechazó propuesta</td><td>p-088 · Horario de depósito</td><td><span class="pill s-controvertida">Apartada</span></td><td>El horario lo fija el contrato con el proveedor.</td></tr>
+              <tr><td>20/10 10:12</td><td>Lucía</td><td>Aceptó propuesta</td><td>p-085 · Uso de guantes</td><td><span class="pill s-en_votacion">Excepcional · 1 voto</span></td><td>Urgente por inspección de seguridad.</td></tr>
+              <tr><td>18/10 09:30</td><td>Lucía</td><td>Aceptó propuesta</td><td>p-097 · Devoluciones</td><td><span class="pill s-recomendada">Acorde</span></td><td class="muted">—</td></tr>
+              <tr><td>12/10 15:02</td><td>Lucía</td><td>Desactivó cuenta</td><td>Marcos</td><td><span class="pill s-abierta">Cuenta</span></td><td>Dejó la empresa.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+      </main>
+    </div>
+
+    <aside class="notes" id="notes"></aside>
+  </div>
+
+  <script>
+    const usuarios = {
+      cliente: { nombre: 'Ana', color: 'var(--cliente)', rol: 'Cliente' },
+      moderador: { nombre: 'Tomás', color: 'var(--moderador)', rol: 'Moderador' },
+      admin: { nombre: 'Lucía', color: 'var(--admin)', rol: 'Administrador' },
+    };
+    const colorRol = { cliente: 'var(--cliente)', moderador: 'var(--moderador)', admin: 'var(--admin)' };
+    const nombreRol = { cliente: 'Cliente', moderador: 'Moderador', admin: 'Admin' };
+
+    const screens = [...document.querySelectorAll('.screen')];
+    let rol = 'cliente';
+    let actual = 'articulos';
+
+    function pantallasDe(r) {
+      return screens.filter((s) => s.dataset.roles.split(' ').includes(r));
+    }
+
+    function renderLista() {
+      const ol = document.getElementById('screen-list');
+      ol.innerHTML = pantallasDe(rol)
+        .map((s) => {
+          const roles = s.dataset.roles.split(' ');
+          const quienes = roles.length === 3 ? 'todos' : roles.length === 1 ? `solo ${nombreRol[rol].toLowerCase()}` : roles.map((r) => nombreRol[r].toLowerCase()).join(' y ');
+          const current = s.dataset.id === actual ? ' aria-current="page"' : '';
+          return `<li><button type="button" data-go="${s.dataset.id}"${current}>${s.dataset.title}<span class="shared">${quienes}</span></button></li>`;
+        })
+        .join('');
+      document.getElementById('screens-title').textContent = `Pantallas · ${usuarios[rol].rol}`;
+    }
+
+    function renderNotas(s) {
+      const temas = s.dataset.temas.split('|').map((t) => `<span>${t}</span>`).join('');
+      const notas = s.dataset.notas.split('|').map((n) => `<li>${n}</li>`).join('');
+      const roles = s.dataset.roles.split(' ').map((r) => `<span style="background:${colorRol[r]}">${nombreRol[r]}</span>`).join('');
+      document.getElementById('notes').innerHTML = `
+        <h2>${s.dataset.title}</h2>
+        <div class="route">${s.dataset.route}</div>
+        <div class="roleline">${roles}</div>
+        <h3>Temáticas que muestra</h3><div class="chips">${temas}</div>
+        <h3>Qué mirar</h3><ul>${notas}</ul>
+        <h3>Tarjetas del backlog</h3><div class="chips">${s.dataset.tarjetas.split(' ').map((t) => `<span>${t}</span>`).join('')}</div>`;
+    }
+
+    function ir(id) {
+      const s = screens.find((x) => x.dataset.id === id);
+      if (!s || !s.dataset.roles.split(' ').includes(rol)) return;
+      actual = id;
+      screens.forEach((x) => x.classList.toggle('on', x === s));
+      document.getElementById('url').textContent = 'abathur.local' + s.dataset.route;
+      document.getElementById('app-nav').style.display = id === 'ingreso' ? 'none' : '';
+      document.querySelectorAll('#app-nav nav a').forEach((a) => {
+        const destino = a.dataset.go;
+        const enSeccion = destino === id || (destino === 'articulos' && ['articulo', 'versiones', 'proponer', 'nuevo-articulo'].includes(id)) || (destino === 'propuestas' && ['propuesta', 'decision'].includes(id));
+        a.classList.toggle('on', enSeccion);
+      });
+      renderLista();
+      renderNotas(s);
+    }
+
+    function cambiarRol(r) {
+      rol = r;
+      document.body.dataset.role = r;
+      document.querySelectorAll('[data-role-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.roleBtn === r)));
+      const u = usuarios[r];
+      document.getElementById('user-name').textContent = u.nombre;
+      const badge = document.getElementById('user-role');
+      badge.textContent = u.rol;
+      badge.style.background = u.color;
+      const av = document.getElementById('user-avatar');
+      av.textContent = u.nombre[0];
+      av.style.background = u.color;
+      const disponible = pantallasDe(r).some((s) => s.dataset.id === actual);
+      ir(disponible ? actual : 'articulos');
+    }
+
+    document.addEventListener('click', (e) => {
+      const t = e.target instanceof Element ? e.target : null;
+      if (!t) return;
+      const rb = t.closest('[data-role-btn]');
+      if (rb) return cambiarRol(rb.dataset.roleBtn);
+      const go = t.closest('[data-go]');
+      if (go) ir(go.dataset.go);
+    });
+
+    // Votación: misma lógica que VoteTallyStore (votos confirmados + borrador → previa).
+    const confirmados = [
+      { alias: 'Sofía', peso: 3, voto: 'a_favor' },
+      { alias: 'Raúl', peso: 1, voto: 'en_contra' },
+    ];
+    const MI_PESO = 3;
+    let borrador = null;
+    let votado = false;
+
+    function renderVotos() {
+      const previa = borrador && !votado ? [...confirmados, { alias: 'Tomás', peso: MI_PESO, voto: borrador, draft: true }] : confirmados;
+      const favor = previa.filter((v) => v.voto === 'a_favor').reduce((a, v) => a + v.peso, 0);
+      const contra = previa.filter((v) => v.voto === 'en_contra').reduce((a, v) => a + v.peso, 0);
+      const quorum = previa.length >= 3;
+      const resultado = !quorum ? 'Sin quórum' : favor > contra ? 'Recomendada' : favor < contra ? 'Desaconsejada' : 'Controvertida';
+
+      document.getElementById('v-favor').textContent = favor;
+      document.getElementById('v-contra').textContent = contra;
+      document.getElementById('v-result').textContent = resultado + (borrador && !votado ? ' (previa)' : '');
+      document.getElementById('v-meter').style.width = favor + contra === 0 ? '0%' : `${(favor / (favor + contra)) * 100}%`;
+      document.querySelectorAll('#v-quorum i').forEach((i, idx) => {
+        i.className = idx < confirmados.length ? 'on' : idx < previa.length ? 'preview' : '';
+      });
+      document.getElementById('v-quorum-text').textContent = quorum ? `Quórum alcanzado: ${previa.length} de 3 moderadores.` : `${previa.length} de 3 moderadores. Hace falta quórum para cerrar.`;
+      document.getElementById('v-list').innerHTML = previa
+        .map((v) => `<li class="${v.draft ? 'draft' : ''}"><span>${v.alias}${v.draft ? ' (sin confirmar)' : ''}</span><span>${v.voto === 'a_favor' ? 'A favor' : 'En contra'} · peso ${v.peso}</span></li>`)
+        .join('');
+      document.getElementById('v-confirm').disabled = !borrador || votado;
+      document.getElementById('v-close').disabled = confirmados.length < 3;
+      document.getElementById('v-hint').textContent = borrador ? 'Vista previa: todavía no se registró.' : 'Elegí una opción para ver la vista previa.';
+    }
+
+    document.querySelectorAll('[data-vote]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (votado) return;
+        borrador = b.dataset.vote;
+        document.querySelectorAll('[data-vote]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        renderVotos();
+      }),
+    );
+
+    document.getElementById('v-confirm').addEventListener('click', () => {
+      if (!borrador) return;
+      confirmados.push({ alias: 'Tomás', peso: MI_PESO, voto: borrador });
+      votado = true;
+      document.getElementById('v-form').hidden = true;
+      document.getElementById('v-done').hidden = false;
+      renderVotos();
+    });
+
+    document.getElementById('v-close').addEventListener('click', () => {
+      const pill = document.querySelector('[data-id="propuesta"] .pill');
+      const favor = confirmados.filter((v) => v.voto === 'a_favor').reduce((a, v) => a + v.peso, 0);
+      const contra = confirmados.filter((v) => v.voto === 'en_contra').reduce((a, v) => a + v.peso, 0);
+      const estado = favor > contra ? 'recomendada' : favor < contra ? 'desaconsejada' : 'controvertida';
+      const texto = { recomendada: 'Recomendada', desaconsejada: 'Desaconsejada', controvertida: 'Controvertida' };
+      pill.className = `pill s-${estado}`;
+      pill.textContent = texto[estado];
+      document.getElementById('v-close').disabled = true;
+      document.getElementById('v-close').textContent = 'Votación cerrada · espera al administrador';
+    });
+
+    // Decisión: motivo obligatorio si se aparta del resultado comunitario (recomendada).
+    const RESULTADO = 'aceptar';
+    function renderDecision() {
+      const elegida = document.querySelector('input[name="d"]:checked').value;
+      const apartada = elegida !== RESULTADO;
+      const motivo = document.getElementById('d-motivo').value.trim();
+      const kind = document.getElementById('d-kind');
+      kind.className = `banner small ${apartada ? 'warn' : 'info'}`;
+      kind.textContent = apartada ? 'Decisión apartada del resultado comunitario. Queda marcada así en la auditoría.' : 'Decisión acorde al resultado comunitario.';
+      document.getElementById('d-opt').textContent = apartada ? '(obligatorio)' : '(opcional)';
+      const invalido = apartada && motivo.length === 0;
+      document.getElementById('d-field').classList.toggle('invalid', invalido);
+      document.getElementById('d-err').hidden = !invalido;
+      document.getElementById('d-submit').disabled = invalido;
+      document.getElementById('d-submit').className = `btn ${elegida === 'rechazar' ? 'bad' : 'ok'}`;
+    }
+    document.getElementById('d-radio').addEventListener('change', renderDecision);
+    document.getElementById('d-motivo').addEventListener('input', renderDecision);
+
+    renderVotos();
+    renderDecision();
+    cambiarRol('cliente');
+  </script>
+</body>
+</html>

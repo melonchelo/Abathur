@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abathur — Roadmap de desarrollo</title>
+  <style>
+    :root {
+      --ink: #1c1915;
+      --muted: #5c564c;
+      --line: #ddd4c6;
+      --paper: #f3efe6;
+      --card: #fffcf7;
+      --accent: #0e5c56;
+      --accent-soft: #e5f2f0;
+      --warn: #8a4b08;
+      --warn-soft: #f8ecd9;
+      --bad: #8d2f2f;
+      --bad-soft: #f8e8e4;
+      --ok: #1f6b3a;
+      --ok-soft: #e5f3ea;
+      --shadow: 0 1px 0 rgba(28, 25, 21, 0.04);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 400px at 10% -10%, #e7f3f1 0%, transparent 55%),
+        var(--paper);
+      font: 17px/1.55 "Segoe UI", "Helvetica Neue", sans-serif;
+    }
+
+    a { color: var(--accent); }
+
+    header.top {
+      padding: 48px 24px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 252, 247, 0.9);
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Iowan Old Style", serif;
+      font-size: 46px;
+      line-height: 1.05;
+      font-weight: 600;
+    }
+
+    .lead { max-width: 72ch; margin: 0; color: var(--muted); font-size: 18px; }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 0 24px;
+      background: rgba(243, 239, 230, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    nav.toc .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      padding: 14px 0;
+    }
+
+    nav.toc a { font-size: 14px; text-decoration: none; }
+
+    nav.toc a:hover { text-decoration: underline; }
+
+    main { padding: 12px 24px 72px; }
+
+    section { padding: 28px 0 8px; scroll-margin-top: 58px; }
+
+    h2 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Iowan Old Style", serif;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 600;
+    }
+
+    h3 { margin: 22px 0 8px; font-size: 18px; }
+
+    p { max-width: 78ch; }
+
+    .verdict {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 18px;
+      margin-top: 22px;
+      padding: 18px;
+      background: var(--ok-soft);
+      border: 1px solid #b7d8c2;
+      border-radius: 14px;
+    }
+
+    .verdict strong { display: block; color: var(--ok); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .grid-3, .grid-2 { display: grid; gap: 14px; margin: 16px 0; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+
+    .card, .note, table {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .card { padding: 16px 16px 14px; }
+    .card h3 { margin-top: 0; }
+    .card .who { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+    .card ul, .note ul { margin: 8px 0 0; padding-left: 18px; }
+
+    .note { padding: 14px 16px; margin: 14px 0; }
+    .note.warn { background: var(--warn-soft); border-color: #efd3a8; }
+    .note.ok { background: var(--accent-soft); border-color: #b9ddd8; }
+    .note.bad { background: var(--bad-soft); border-color: #efc8c0; }
+
+    table { width: 100%; border-collapse: collapse; overflow: hidden; margin: 14px 0 18px; }
+    th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+    th { background: #f7f1e6; font-size: 13px; letter-spacing: 0.02em; }
+    tr:last-child td { border-bottom: 0; }
+    .scroll { overflow-x: auto; }
+
+    code, pre { font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; }
+    code { font-size: 0.92em; background: #efe8dc; padding: 0.1em 0.35em; border-radius: 4px; }
+    pre {
+      background: #221f1b;
+      color: #f6f1e8;
+      padding: 14px 16px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+    .chip { border-radius: 999px; padding: 3px 10px; font-size: 13px; background: #efe8dc; }
+    .chip.abierta { background: #eceae4; }
+    .chip.voto { background: #e3eef8; }
+    .chip.reco { background: var(--accent-soft); }
+    .chip.desa { background: #f3e4dc; }
+    .chip.contro { background: var(--warn-soft); }
+    .chip.ok { background: var(--ok-soft); }
+    .chip.bad { background: var(--bad-soft); }
+
+    ol.steps { padding-left: 20px; }
+    ol.steps li { margin: 6px 0; }
+
+    .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+    .flow span, .flow b {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 13px;
+    }
+    .flow i { font-style: normal; color: var(--muted); }
+
+    footer {
+      padding: 18px 24px 36px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 860px) {
+      h1 { font-size: 36px; }
+      .verdict, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      header.top, main, nav.toc, footer { padding-left: 16px; padding-right: 16px; }
+    }
+
+    @media print {
+      nav.toc { position: static; }
+      body { background: white; }
+      .card, .note, table, pre { break-inside: avoid; }
+      a { text-decoration: none; color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <p class="eyebrow">Documento de trabajo · 26 de octubre de 2026</p>
+      <h1>Abathur</h1>
+      <p class="lead">Roadmap para construir la plataforma de gestión del conocimiento del documento maestro, con un equipo de tres y la entrega final de Frontend como restricción de diseño.</p>
+      <div class="verdict">
+        <strong>Veredicto</strong>
+        <div>
+          Las cinco unidades de la materia entran en esta entrega, junto con signals en votación y reputación, y con tipos estrictos en todo el recorrido. El alcance que se ajusta es el del producto: sanciones, relaciones entre artículos, adjuntos, recuperación de cuentas, búsqueda avanzada, grafo y notificaciones quedan para después.
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Secciones">
+    <div class="wrap">
+    <a href="#tematicas">Temáticas</a>
+    <a href="#equipo">Equipo</a>
+    <a href="#alcance">Alcance</a>
+    <a href="#reglas">Reglas cerradas</a>
+    <a href="#tipos">Tipos y arquitectura</a>
+    <a href="#signals">Signals</a>
+    <a href="#pantallas">Pantallas</a>
+    <a href="#api">API</a>
+    <a href="#bloques">Bloques</a>
+    <a href="#hecho">Definición de hecho</a>
+    <a href="#defensa">Defensa</a>
+    <a href="#tiempo">Si falta tiempo</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section id="tematicas">
+      <h2>1. Temáticas y dónde se demuestran</h2>
+      <p>Cada unidad tiene una evidencia concreta, en una pantalla que el equipo puede abrir durante la defensa. La directiva estructural de Angular y el control flow nuevo se muestran por separado: <code>@if</code>, <code>@for</code> y <code>@switch</code> cubren estructuras de control; <code>appHasRole</code> y <code>appAvisoRevision</code> cubren directivas propias.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Unidad</th>
+              <th>Evidencia en el producto</th>
+              <th>Quién la deja lista para explicar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Servicios y dependencias</td>
+              <td>Servicios por feature con <code>inject()</code>. Token <code>API_BASE_URL</code>. Interceptor de autenticación. <code>VoteWeightPolicy</code> inyectable. <code>VoteTallyStore</code> provisto en la ruta de la propuesta, para mostrar un inyector de ruta y no solo <code>providedIn: 'root'</code>.</td>
+              <td>Los tres. El token, el interceptor y la policy nacen en el bloque 0, con vos. Cada integrante escribe los servicios de su feature.</td>
+            </tr>
+            <tr>
+              <td>Directivas</td>
+              <td><code>appHasRole</code> oculta acciones según el rol. <code>appAvisoRevision</code> marca el artículo que tiene una propuesta abierta.</td>
+              <td>Integrante B crea <code>appHasRole</code>. Integrante A crea <code>appAvisoRevision</code>. Vos las usás en administración.</td>
+            </tr>
+            <tr>
+              <td>Pipes</td>
+              <td><code>estadoPropuesta</code>, <code>estadoArticulo</code>, <code>pesoVoto</code> y <code>diffLineas</code>. Las fechas visibles usan el <code>DatePipe</code> con locale <code>es-AR</code>.</td>
+              <td>A: estado de artículo. B: estado de propuesta, peso y diff.</td>
+            </tr>
+            <tr>
+              <td>Enrutamiento</td>
+              <td>Rutas standalone con <code>loadComponent</code>, <code>authGuard</code> y <code>roleGuard</code>. El detalle de artículo, la propuesta y el perfil de reputación salen del parámetro de ruta.</td>
+              <td>A arma el shell, el guard de sesión y las rutas de consulta. B arma las rutas de propuestas. Vos armás las de administración.</td>
+            </tr>
+            <tr>
+              <td>Estructuras de control</td>
+              <td><code>@for</code> con <code>track</code> y <code>@empty</code> en listados. <code>@if</code> para revisión, quórum, errores de formulario y resolución apartada. <code>@switch</code> con una rama por estado de propuesta y por estado de carga. Árbol de categorías con un componente que se renderiza a sí mismo.</td>
+              <td>Los tres, cada uno en sus plantillas. El <code>@switch</code> de estados es de B. El árbol es de A. El <code>@switch</code> de la resolución administrativa es tuyo.</td>
+            </tr>
+            <tr>
+              <td>APIs y HTTP Client</td>
+              <td><code>provideHttpClient</code>, servicios que devuelven <code>Observable&lt;T&gt;</code>, interceptor, lectura tipada del error y pantallas con estado vacío, carga y error.</td>
+              <td>Los tres consumen la API. Vos la implementás. El puente a signals existe solo en votación y reputación.</td>
+            </tr>
+            <tr>
+              <td>Formularios</td>
+              <td>Reactivos: ingreso, artículo, categoría, propuesta, voto, alta de usuario y decisión administrativa, con validadores propios. Template-driven: el comentario de una propuesta, para mostrar el otro estilo de la unidad.</td>
+              <td>A: ingreso, artículo y categoría. B: propuesta, voto y comentario. Vos: usuario y decisión, con validador cruzado para el motivo.</td>
+            </tr>
+            <tr>
+              <td>Signals, pedido aparte de la cátedra</td>
+              <td>Previsualización de quórum, pesos y resultado de la votación. Puntaje de reputación calculado desde los eventos.</td>
+              <td>B implementa los dos stores. Vos consumís el resultado comunitario en la pantalla de decisión y mantenés la misma fórmula en el servidor.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note ok">
+        Si la cátedra pide <code>NgModule</code>, los mismos servicios se declaran en el <code>providers</code> del módulo de cada feature. Las pantallas, las rutas y el reparto no cambian. La base prevista es standalone, con la versión estable de Angular al momento de crear el proyecto.
+      </div>
+    </section>
+
+    <section id="equipo">
+      <h2>2. Equipo</h2>
+      <div class="grid-3">
+        <article class="card">
+          <p class="who">Integrante A · frontend</p>
+          <h3>Consulta del conocimiento</h3>
+          <ul>
+            <li>Shell, navegación y guard de sesión.</li>
+            <li>Ingreso, artículos, búsqueda, categorías y versiones.</li>
+            <li>Formularios de artículo y categoría.</li>
+            <li>Directiva de aviso de revisión y pipe de estado del artículo.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <p class="who">Integrante B · frontend</p>
+          <h3>Propuestas, votos y reputación</h3>
+          <ul>
+            <li>Alta y detalle de propuestas, diff y comentarios.</li>
+            <li>Directiva de rol, pipes de estado, peso y diff.</li>
+            <li>Stores de signals para la votación y la reputación.</li>
+            <li>Formularios de propuesta, voto y comentario.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <p class="who">Vos · frontend y backend</p>
+          <h3>Reglas, API y administración</h3>
+          <ul>
+            <li>API, semilla, autenticación y reglas de integridad.</li>
+            <li>Publicación de versiones, reputación y auditoría.</li>
+            <li>Pantallas de usuarios, decisión administrativa y auditoría.</li>
+            <li>Misma fórmula de peso que el store de signals.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="note warn">
+        El camino crítico sos vos en el bloque 0: sin login y sin los GET sembrados, A y B no pueden mostrar HTTP real. El medio día de arranque es de los tres, para dejar modelos, lint y carpetas antes de separarse.
+      </div>
+    </section>
+
+    <section id="alcance">
+      <h2>3. Alcance de esta entrega</h2>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Entra</h3>
+          <ul>
+            <li>Artículos publicados, con versión vigente e historial inmutable. El cuerpo de cada versión es Markdown.</li>
+            <li>Propuestas de creación y de modificación.</li>
+            <li>Comparación en dos columnas, línea por línea.</li>
+            <li>Comentarios planos en la propuesta.</li>
+            <li>Votación ponderada de moderadores, con quórum de tres.</li>
+            <li>Decisión final del administrador, incluida la resolución excepcional.</li>
+            <li>Controversia abierta, sin vencimiento.</li>
+            <li>Aviso de revisión mientras el artículo sigue consultable.</li>
+            <li>Categorías y subcategorías, sin ciclos.</li>
+            <li>Eventos de reputación y explicación del puntaje.</li>
+            <li>Auditoría de las decisiones que se apartan del resultado comunitario o que cierran sin quórum.</li>
+            <li>Búsqueda por título o resumen, y filtro por categoría.</li>
+            <li>Alta de cuentas hecha por el administrador. Un rol por persona.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Después de esta entrega</h3>
+          <ul>
+            <li>Sanciones y apelaciones.</li>
+            <li>Relaciones entre artículos, tipadas o simples.</li>
+            <li>Archivos adjuntos. Las fuentes son título más URL.</li>
+            <li>Recuperación de contraseña y autogestión de cuenta.</li>
+            <li>Búsqueda avanzada, grafo y notificaciones. El índice para una búsqueda asistida se arma después, partiendo el Markdown publicado por encabezados.</li>
+            <li>Hilos de comentarios, edición y borrado.</li>
+            <li>Cambiar un voto ya emitido.</li>
+            <li>Varios roles simultáneos en la misma cuenta.</li>
+            <li>Fusión de texto si la propuesta quedó armada sobre una versión vieja. Al resolver, se muestra el aviso y el administrador decide con el contenido propuesto.</li>
+          </ul>
+        </article>
+      </div>
+      <p>Esas exclusiones no apagan ninguna unidad. La búsqueda básica sí entra, porque el documento maestro la trata como parte de consultar el repositorio.</p>
+    </section>
+
+    <section id="reglas">
+      <h2>4. Reglas que este roadmap cierra</h2>
+      <p>El documento maestro deja estas decisiones abiertas. Para construir hace falta una versión única. Si alguna no les cierra, se cambia antes del bloque 1: el store, el servidor y la semilla tienen que usar los mismos números.</p>
+
+      <h3>Personas y acceso</h3>
+      <p>Una cuenta tiene un rol: <code>admin</code>, <code>moderador</code> o <code>cliente</code>. La identidad visible es el seudónimo. El ingreso es usuario y contraseña, con JWT. El administrador crea las cuentas. Desactivar una cuenta le impide entrar y conserva votos, eventos y auditoría.</p>
+
+      <h3>Estados de una propuesta</h3>
+      <div class="chips" aria-label="Estados">
+        <span class="chip abierta">abierta</span>
+        <span class="chip voto">en_votacion</span>
+        <span class="chip reco">recomendada</span>
+        <span class="chip desa">desaconsejada</span>
+        <span class="chip contro">controvertida</span>
+        <span class="chip ok">aceptada</span>
+        <span class="chip bad">rechazada</span>
+      </div>
+      <p>El cierre de la votación deja la propuesta en <code>recomendada</code>, <code>desaconsejada</code> o <code>controvertida</code>. El artículo publicado sigue igual. Solo la decisión del administrador la pasa a <code>aceptada</code> o <code>rechazada</code>.</p>
+      <ul>
+        <li>Cliente o moderador crea la propuesta. Arranca en <code>abierta</code>.</li>
+        <li>Moderador o administrador pasa a <code>en_votacion</code>.</li>
+        <li>Con al menos tres votos, moderador o administrador cierra la votación. El servidor calcula el resultado.</li>
+        <li>Más peso a favor que en contra: <code>recomendada</code>. Más peso en contra: <code>desaconsejada</code>. Las dos quedan a la espera del administrador.</li>
+        <li>Empate de pesos: <code>controvertida</code>. Permanece así hasta una decisión posterior. No tiene vencimiento.</li>
+        <li>El administrador acepta o rechaza. Si su decisión no coincide con el resultado comunitario, o si el resultado fue un empate, el motivo es obligatorio y la auditoría marca la decisión como apartada.</li>
+        <li>Con menos de tres votos, el administrador puede resolver igual. El motivo es obligatorio y la resolución queda como excepcional, distinta de un consenso de moderadores.</li>
+      </ul>
+
+      <h3>Voto</h3>
+      <p>Un voto por moderador y propuesta. No se edita. La elección es <code>a_favor</code> o <code>en_contra</code>. En esta entrega no hay abstención. Al emitir el voto se guarda <code>weight_at_vote</code>. El cliente puede previsualizar el peso; el valor que vale es el que devuelve el servidor.</p>
+
+      <h3>Peso</h3>
+      <pre>peso = min(5, max(1, Math.floor(reputacion / 10)))</pre>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Reputación</th><th>Peso</th><th>Uso en la semilla</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0 a 19</td><td>1</td><td>Cliente nuevo en 10. Moderador de peso mínimo en 10.</td></tr>
+            <tr><td>20 a 29</td><td>2</td><td></td></tr>
+            <tr><td>30 a 39</td><td>3</td><td>Moderador inicial habitual, reputación 30.</td></tr>
+            <tr><td>40 a 49</td><td>4</td><td></td></tr>
+            <tr><td>50 o más</td><td>5</td><td>Tope, aunque la reputación siga subiendo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Ejemplo de cierre: pesos 3, 3 y 1. Dos a favor (3 + 3) y uno en contra (1). Quórum cumplido, 6 contra 1, resultado recomendada. Ejemplo de controversia: pesos 4, 2 y 2, con el 4 en contra y los otros dos a favor. Quórum cumplido, 4 contra 4, controversia.</p>
+
+      <h3>Reputación</h3>
+      <p>El puntaje es la suma de los eventos. Publicar, comentar o votar no suma. Rechazar una propuesta tampoco resta.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Evento</th><th>Delta</th><th>Cuándo</th><th>source_id</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>asignacion_inicial</code></td><td>el valor inicial</td><td>Al crear la cuenta</td><td>id de usuario</td></tr>
+            <tr><td><code>aporte_respaldado</code></td><td>+5 al autor de la propuesta</td><td>El administrador acepta</td><td>id de propuesta</td></tr>
+            <tr><td><code>error_comprobado</code></td><td>−5 a quien publicó la versión de base</td><td>Acepta una modificación y marca el contenido anterior como error</td><td>id de propuesta</td></tr>
+            <tr><td><code>conducta_abusiva</code></td><td>−8</td><td>Acción manual del administrador, con motivo</td><td>id del registro de auditoría de esa acción</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>La unicidad de <code>user_id + event_type + source_id</code> impide aplicar dos veces el mismo respaldo o el mismo error. La conducta abusiva puede repetirse porque cada acción genera una auditoría nueva.</p>
+
+      <h3>Contenido</h3>
+      <p>Una propuesta carga un objeto tipado, no un texto suelto: título, resumen, contenido, categoría, etiquetas y fuentes. La creación no tiene artículo ni versión de base. La modificación guarda ambos. Al aceptar, el servidor crea una versión nueva y no reescribe la anterior. El número de versión es único por artículo.</p>
+      <p><code>ArticleVersion.content</code> y <code>ProposedArticle.content</code> son un <code>string</code> Markdown. En esta entrega el texto admite encabezados <code>#</code> y <code>##</code>, párrafos y listas con <code>-</code>. El POST rechaza el cuerpo si trae una etiqueta HTML y, si lo acepta, lo guarda igual a como llegó. La pantalla de lectura lo muestra con un componente que parte el string en bloques tipados y usa <code>@switch</code>. No se persiste HTML ni se pinta el cuerpo con <code>innerHTML</code>. El diff sigue comparando el string línea por línea.</p>
+    </section>
+
+    <section id="tipos">
+      <h2>5. Tipos y arquitectura</h2>
+      <p>El repositorio queda así:</p>
+      <pre>Abathur/
+  roadmap.html
+  frontend/     Angular standalone, TypeScript strict
+  backend/      Express + TypeScript + SQLite</pre>
+      <p>Los tipos del contrato se escriben en los dos lados. El JSON es la fuente de verdad compartida. Fechas de la API: <code>string</code> ISO. La pantalla las muestra con <code>DatePipe</code>. Los identificadores son <code>string</code>. Los estados son uniones de literales, y ese mismo literal viaja en el JSON.</p>
+      <pre>type Role = 'admin' | 'moderador' | 'cliente';
+
+type ProposalStatus =
+  | 'abierta'
+  | 'en_votacion'
+  | 'recomendada'
+  | 'desaconsejada'
+  | 'controvertida'
+  | 'aceptada'
+  | 'rechazada';
+
+type LoadState&lt;T&gt; =
+  | { status: 'loading' }
+  | { status: 'error'; error: ApiError }
+  | { status: 'ready'; data: T };
+
+interface ApiError { code: string; message: string; }
+
+interface ProposedArticle {
+  title: string;
+  summary: string;
+  content: string; // Markdown: #, ##, párrafos y listas con "-". Sin HTML.
+  categoryId: string;
+  tags: readonly string[];
+  sources: readonly { title: string; url: string }[];
+}</pre>
+      <p><code>HttpClient</code> se llama con el genérico del DTO: <code>get&lt;ArticleDetail&gt;</code>, <code>post&lt;Vote&gt;</code>. El cuerpo de error se lee con una función <code>readApiError(error: unknown): ApiError</code>. Ahí se estrecha <code>unknown</code>. Esa función es el lugar previsto para no abrir la puerta a <code>any</code>.</p>
+      <div class="note bad">
+        Prohibido <code>any</code>, <code>as any</code> y un objeto genérico para “después vemos”. En el bloque 0 quedan activos <code>strict</code>, <code>noImplicitAny</code> y <code>@typescript-eslint/no-explicit-any</code> en error. El backend usa la misma regla.
+      </div>
+      <p>Los servicios HTTP devuelven <code>Observable&lt;T&gt;</code>. Las pantallas de artículos consumen ese observable con <code>async</code> dentro de <code>@if</code>. Votación y reputación son la excepción documentada en la sección 6.</p>
+      <h3>Semilla de desarrollo</h3>
+      <p>Contraseña de todas las cuentas de desarrollo: <code>abathur</code>. Sirve para poblar cada rama del <code>@switch</code> antes de que existan los POST de cierre.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Dato</th><th>Para qué pantalla</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>admin, tres moderadores (reputación 30, 30 y 10) y dos clientes</td><td>Roles, peso 3 y peso 1</td></tr>
+            <tr><td>Categorías Operación → Turnos, Operación → Caja, Seguridad</td><td>Árbol y filtro</td></tr>
+            <tr><td>Artículo vigente con propuesta abierta</td><td>Aviso de revisión</td></tr>
+            <tr><td>Artículo con versión 1 y versión 2</td><td>Historial inmutable</td></tr>
+            <tr><td>Propuestas en abierta, en votación con 2 votos, recomendada, desaconsejada, controvertida, aceptada, rechazada por el administrador con motivo, y aceptada excepcional con un solo voto</td><td>Todas las ramas de estado y de resolución</td></tr>
+            <tr><td>Eventos de reputación y una fila de auditoría</td><td>Puntaje y listado de auditoría</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="signals">
+      <h2>6. Signals en votación y reputación</h2>
+      <p>El resto de la aplicación sigue en observables HTTP. Estos dos casos pasan a signal porque el valor que se muestra se calcula a partir de otros valores, y tiene que moverse al elegir un voto o al incorporar un evento.</p>
+      <h3>Votación</h3>
+      <p><code>VoteTallyStore</code> se provee en la ruta del detalle de propuesta. Guarda los votos confirmados y la elección todavía no enviada:</p>
+      <pre>votes = signal&lt;readonly Vote[]&gt;([])
+draft = signal&lt;VoteChoice | null&gt;(null)
+
+quorum = computed(() =&gt; previewVotes().length &gt;= 3)
+favor = computed(() =&gt; sumar(previewVotes(), 'a_favor'))
+contra = computed(() =&gt; sumar(previewVotes(), 'en_contra'))
+preview = computed(() =&gt; resolver(favor(), contra(), quorum()))</pre>
+      <p>La previsualización suma el borrador con el peso que hoy daría <code>VoteWeightPolicy</code> para el moderador actual. El texto de la pantalla dice que es una vista previa. Al confirmar, el store reemplaza el arreglo con el voto devuelto por la API y deja el borrador en <code>null</code>. El peso guardado es <code>weight_at_vote</code>. Cerrar la votación llama al servidor; si el quórum no se cumple, la API responde error tipado y la pantalla lo muestra con <code>@if</code>.</p>
+      <p>Los arreglos se reemplazan. No se muta el contenido de un signal.</p>
+      <h3>Reputación</h3>
+      <p><code>ReputationStore</code> guarda <code>events = signal&lt;readonly ReputationEvent[]&gt;([])</code> y un <code>computed</code> con la suma de <code>delta</code>. La pantalla de una persona lista los eventos con <code>@for</code> y muestra el puntaje calculado. Cuando la decisión administrativa devuelve eventos nuevos, el store los agrega y el puntaje cambia sin recargar a mano.</p>
+      <p>Los dos stores usan <code>LoadState&lt;T&gt;</code> y la plantilla hace <code>@switch (state.status)</code> para carga, error y listo. El servicio HTTP sigue devolviendo el observable; el store es el único que hace <code>set</code> sobre el signal.</p>
+      <p>Hay una spec chica de <code>VoteWeightPolicy</code> y de <code>resolver</code> con los ejemplos de la sección 4: peso 1, 3 y 5, quórum insuficiente, recomendada y controversia. Esa spec es la garantía de que la previa y el servidor cuentan igual.</p>
+    </section>
+
+    <section id="pantallas">
+      <h2>7. Pantallas y rutas</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Ruta</th><th>Quién entra</th><th>Dueño</th><th>Qué tiene que verse de Angular</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>/ingreso</code></td><td>Público</td><td>A</td><td>Formulario reactivo y POST tipado</td></tr>
+            <tr><td><code>/articulos</code></td><td>Autenticado</td><td>A</td><td><code>@for</code>, <code>@empty</code>, búsqueda, filtro por categoría</td></tr>
+            <tr><td><code>/articulos/nuevo</code></td><td>Admin</td><td>A</td><td>Formulario reactivo, <code>roleGuard</code></td></tr>
+            <tr><td><code>/articulos/:articleId</code></td><td>Autenticado</td><td>A</td><td>Detalle, fuentes, directiva de revisión, enlace a proponer</td></tr>
+            <tr><td><code>/articulos/:articleId/versiones</code></td><td>Autenticado</td><td>A</td><td>Historial. La vigente queda destacada</td></tr>
+            <tr><td><code>/categorias</code></td><td>Admin para editar</td><td>A</td><td>Árbol recursivo y formulario. El validador impide elegirse como padre</td></tr>
+            <tr><td><code>/propuestas</code></td><td>Autenticado</td><td>B</td><td><code>@for</code> y filtro por estado con el pipe</td></tr>
+            <tr><td><code>/propuestas/nueva</code> y <code>/articulos/:articleId/proponer</code></td><td>Cliente y moderador</td><td>B</td><td>Mismo formulario reactivo. Creación sin artículo; modificación con versión de base</td></tr>
+            <tr><td><code>/propuestas/:proposalId</code></td><td>Autenticado</td><td>B</td><td><code>@switch</code> de estado, diff, comentarios template-driven, voto, signals</td></tr>
+            <tr><td><code>/personas/:userId/reputacion</code></td><td>Autenticado</td><td>B</td><td>Eventos y puntaje en signal</td></tr>
+            <tr><td><code>/admin/usuarios</code></td><td>Admin</td><td>Vos</td><td>Alta, rol, desactivar, conducta abusiva con motivo</td></tr>
+            <tr><td><code>/admin/propuestas/:proposalId/decision</code></td><td>Admin</td><td>Vos</td><td>Formulario con motivo condicional. Lee el preview comunitario del store</td></tr>
+            <tr><td><code>/admin/auditoria</code></td><td>Admin</td><td>Vos</td><td><code>@for</code> de registros, motivo visible</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="api">
+      <h2>8. API que tiene que existir</h2>
+      <p>Base <code>http://localhost:3000/api</code>, expuesta con el token de inyección. Cada respuesta de error usa <code>ApiError</code>. Las operaciones de escritura vuelven a chequear el rol en el servidor.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Método y ruta</th><th>Bloque</th><th>Regla que protege</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>POST /auth/login</code> · <code>GET /me</code></td><td>0</td><td>Cuenta activa y rol en el token</td></tr>
+            <tr><td><code>GET</code> de artículos, versiones, categorías, propuestas, comentarios, votos, reputación y auditoría</td><td>0</td><td>Leen la semilla. <code>underReview</code> viene calculado</td></tr>
+            <tr><td><code>POST /articles</code> · <code>POST /categories</code> · <code>PATCH /categories/:id</code></td><td>1</td><td>Solo admin. La categoría no puede ser su propio padre ni formar un ciclo. El alta de artículo crea la versión 1. <code>content</code> se guarda como Markdown y se rechaza si trae HTML</td></tr>
+            <tr><td><code>POST /proposals</code> · <code>POST /proposals/:id/comments</code> · <code>POST /proposals/:id/voting</code></td><td>1</td><td>Cliente y moderador proponen y comentan. Solo moderador o admin abre la votación. El cuerpo propuesto cumple la misma regla de Markdown</td></tr>
+            <tr><td><code>POST /proposals/:id/votes</code> · <code>POST /proposals/:id/close</code></td><td>2</td><td>Un voto por moderador. Congela el peso. Cerrar exige tres votos y deja el resultado comunitario</td></tr>
+            <tr><td><code>POST /proposals/:id/decision</code></td><td>3</td><td>Solo admin. Crea versión si acepta. Escribe reputación y auditoría. Exige motivo si se aparta o si no hubo quórum</td></tr>
+            <tr><td><code>POST /users</code> · <code>PATCH /users/:id</code> · <code>POST /users/:id/sanctions</code></td><td>4</td><td>Alta con evento inicial de reputación. Desactivar no borra historia. La sanción manual es el evento <code>conducta_abusiva</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>El nombre <code>/sanctions</code> de esa ruta corresponde solo al evento manual de conducta. El módulo de sanciones del documento maestro sigue fuera de la entrega.</p>
+    </section>
+
+    <section id="bloques">
+      <h2>9. Bloques de trabajo</h2>
+      <p>Ocho hitos entre el 26/10 y la defensa presencial del 20/11/2026. La entrega del código es el martes 17/11. El orden importa porque cada bloque deja HTTP real para el siguiente. La <a href="infografia.html">infografía</a> muestra dónde estamos y qué backend bloquea cada tramo; las tareas están en el <a href="backlog.html">backlog</a>.</p>
+      <p>Los viernes 30/10, 6/11 y 13/11 hay clase con tema nuevo: ese día no cierra ningún bloque ni ningún backend. Los bloques 0, 1 y 2 cierran un miércoles. El bloque 3 llega hasta el lunes 16/11, porque el miércoles siguiente ya es posterior a la entrega. El backend que desbloquea un tramo cae en un día hábil anterior a ese cierre.</p>
+
+      <article class="card">
+        <p class="who">Bloque 0 · arranque · 26/10 → 28/10 · backend BE-0 el 28/10</p>
+        <h3>Cimientos</h3>
+        <ul>
+          <li>Los tres: crear frontend strict y backend, carpetas de modelos, regla de lint contra <code>any</code>, token <code>API_BASE_URL</code>, layout con router outlet.</li>
+          <li>Vos: login, semilla completa y todos los GET de la sección 8. CORS para el puerto de Angular.</li>
+          <li>A: ruta de ingreso funcionando contra el POST real, guard de sesión, rutas vacías de artículos.</li>
+          <li>B: rutas vacías de propuestas, directiva <code>appHasRole</code> y pipe <code>estadoPropuesta</code>.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="who">Bloque 1 · consulta y propuestas · 29/10 → 04/11 · backend BE-1 el 03/11</p>
+        <h3>Leer el repositorio y cargar una propuesta</h3>
+        <ul>
+          <li>A: listado, búsqueda, detalle, árbol de categorías, historial, directiva de aviso, pipe de estado del artículo, vacíos y errores.</li>
+          <li>B: formulario reactivo de propuesta, diff con <code>diffLineas</code>, comentarios template-driven, listado de propuestas con <code>@switch</code> en el detalle.</li>
+          <li>Vos: POST de artículos, categorías, propuestas y comentarios. Apertura de votación. Versión inmutable en el alta del artículo base.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="who">Bloque 2 · votación · 05/11 → 11/11 · backend BE-2 el 09/11</p>
+        <h3>Signals de quórum y peso</h3>
+        <ul>
+          <li>B: <code>VoteTallyStore</code>, formulario de voto, previa, botón de cierre habilitado con el <code>computed</code> de quórum, spec de la fórmula.</li>
+          <li>A: formularios de artículo y de categoría, conectados a los POST del bloque 1. Validador de padre.</li>
+          <li>Vos: POST de voto y de cierre, unicidad, snapshot de peso y la misma policy en el servidor.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="who">Bloque 3 · decisión y reputación · 12/11 → 16/11 · backend BE-3 el 11/11</p>
+        <h3>El administrador cierra, la versión nace, el puntaje se mueve</h3>
+        <ul>
+          <li>Vos: endpoint de decisión, versión nueva, eventos, auditoría y formulario de decisión con motivo condicional. La pantalla lee el resultado del store.</li>
+          <li>B: <code>ReputationStore</code>, pantalla de eventos y actualización del puntaje con lo que devuelve la decisión.</li>
+          <li>A: el aviso de revisión y el historial muestran el artículo después de aceptar una propuesta.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="who">Bloque 4 · cuentas y permisos · 16/11 · backend BE-4 el 12/11</p>
+        <h3>Tres roles, de punta a punta</h3>
+        <ul>
+          <li>Vos: alta de usuarios, cambio de rol, desactivar, conducta abusiva y listado de auditoría.</li>
+          <li>A y B: recorrer ingreso como admin, moderador y cliente. Cada acción prohibida desaparece con <code>appHasRole</code> y además falla en la API.</li>
+          <li>Los tres: buscar <code>any</code> en frontend y backend, y congelar el lunes 16/11. Desde ese momento solo entran bugs.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="who">Bloque 5 · entrega · 17/11</p>
+        <h3>Se entrega el código</h3>
+        <ul>
+          <li>Tag <code>v1.0</code> en main y semilla recreada.</li>
+          <li>README para levantar front, back y semilla.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="who">Bloque 6 · ensayo · 18/11 → 19/11 · defensa presencial el 20/11</p>
+        <h3>Ensayo del recorrido</h3>
+        <ul>
+          <li>Correr el guion de la sección 11 con la semilla y, además, crear una propuesta nueva en vivo.</li>
+          <li>Abrir los archivos de la tabla de temáticas, no solo las pantallas.</li>
+          <li>Dejar anotado qué integrante explica cada archivo. El viernes 20/11 es la defensa, no un día de desarrollo.</li>
+        </ul>
+      </article>
+
+      <h3>Convenio de repo</h3>
+      <p>Ramas cortas: <code>front/articulos</code>, <code>front/propuestas</code>, <code>api/reglas</code>. Se integran a <code>main</code> al cerrar cada bloque. La semilla tiene que poder recrearse con un script, y el archivo de SQLite no se commitea.</p>
+    </section>
+
+    <section id="hecho">
+      <h2>10. Definición de hecho</h2>
+      <p>Una pantalla está lista cuando cumple todo esto:</p>
+      <ol class="steps">
+        <li>El DTO y el formulario tienen tipos nombrados. No hay <code>any</code>.</li>
+        <li>La acción pasa por un servicio. El componente no arma la URL a mano.</li>
+        <li>Hay estado de carga, de error de API y de lista vacía cuando corresponde.</li>
+        <li>El rol se nota en la interfaz y el servidor rechaza el mismo pedido si el rol no alcanza.</li>
+        <li>Las fechas de la API siguen siendo <code>string</code>. El formato visible sale del pipe.</li>
+        <li>En votación, el peso confirmado se lee de <code>weight_at_vote</code>. En reputación, el puntaje sale del <code>computed</code> de los eventos.</li>
+        <li>El cuerpo del artículo que viaja y se guarda es Markdown. La lectura lo muestra desde bloques tipados, sin <code>innerHTML</code>.</li>
+      </ol>
+    </section>
+
+    <section id="defensa">
+      <h2>11. Guion de defensa</h2>
+      <p>Tres pasadas, una por rol. Se ensayan el miércoles 18/11 y el jueves 19/11, con el proyecto ya entregado. La defensa presencial es el viernes 20/11.</p>
+      <ol class="steps">
+        <li><strong>Cliente.</strong> Entra, busca un procedimiento, abre un artículo en revisión y muestra el aviso. Crea una propuesta de modificación, ve el diff contra la versión de base y deja un comentario.</li>
+        <li><strong>Tres moderadores.</strong> Abren la votación. Cada voto mueve quórum y pesos en la previa. El tercero permite cerrar. El resultado queda recomendado, desaconsejado o en controversia, y el artículo publicado sigue igual.</li>
+        <li><strong>Administrador.</strong> Acepta una recomendación: nace otra versión, el historial conserva la anterior y el autor suma un evento de reputación. En otra propuesta, rechaza apartándose del resultado y el motivo queda en auditoría. Resuelve una propuesta sin quórum y la pantalla la identifica como decisión excepcional.</li>
+      </ol>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Si preguntan por</th><th>Abrir</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Dependencias</td><td><code>api-url.token.ts</code>, <code>auth.interceptor.ts</code>, providers de la ruta de propuesta</td></tr>
+            <tr><td>Servicios y HTTP</td><td>Un servicio de artículos y uno de propuestas, más <code>read-api-error.ts</code></td></tr>
+            <tr><td>Directivas</td><td><code>has-role.directive.ts</code> y <code>aviso-revision.directive.ts</code></td></tr>
+            <tr><td>Pipes</td><td><code>estado-propuesta.pipe.ts</code>, <code>peso-voto.pipe.ts</code>, <code>diff-lineas.pipe.ts</code></td></tr>
+            <tr><td>Rutas</td><td><code>app.routes.ts</code> y los dos guards</td></tr>
+            <tr><td>Estructuras de control</td><td>Plantilla del detalle de propuesta y rama de categorías</td></tr>
+            <tr><td>Formularios</td><td>Propuesta reactiva, comentario template-driven, decisión con validador de motivo</td></tr>
+            <tr><td>Signals</td><td><code>vote-tally.store.ts</code> y <code>reputation.store.ts</code></td></tr>
+            <tr><td>Tipos</td><td><code>proposal.model.ts</code> y la config de ESLint</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tiempo">
+      <h2>12. Si falta tiempo</h2>
+      <p>Se recorta en este orden. Cada corte deja las cinco unidades, signals y el tipado estricto en pie.</p>
+      <ol class="steps">
+        <li>Las etiquetas como chips en el detalle. Siguen en el formulario y en el tipo <code>ProposedArticle</code>.</li>
+        <li>El evento manual de conducta abusiva. El resto de la reputación queda.</li>
+        <li>El diff deja de marcar línea por línea y muestra los dos textos completos. El pipe de estado y el de peso siguen.</li>
+        <li>La pantalla de auditoría muestra solo las decisiones de propuestas, no el alta de usuarios.</li>
+      </ol>
+      <p>Lo que no se entrega a cambio de tiempo: el login real, el <code>@switch</code> de estados, un formulario reactivo con validación, la directiva de rol, un pipe propio, los GET y POST tipados, la votación con signals y la decisión del administrador que genera una versión nueva.</p>
+      <div class="note ok">
+        Esas piezas alcanzan para defender la materia aunque el bloque 4 entre justo. El producto se ve más chico y las unidades siguen todas presentes.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Abathur · roadmap de la entrega final de Frontend · basado en el documento maestro v1.0 · equipo de dos frontend y una persona de frontend y backend.
+    </div>
+  </footer>
+</body>
+</html>
