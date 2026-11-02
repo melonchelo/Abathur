@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abathur — Pseudo backlog</title>
+  <style>
+    :root {
+      --bg: #fbf3ec;
+      --ink: #1f2259;
+      --muted: #5d5f86;
+      --navy: #2d3283;
+      --card: #fffaf5;
+      --line: #efe1d3;
+      --orange: #f39a3d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15.5px/1.45 "Segoe UI", system-ui, sans-serif; }
+
+    .page { max-width: 1240px; margin: 0 auto; padding: 32px 20px 56px; }
+
+    h1 { margin: 0; font-size: 44px; line-height: 1; font-weight: 900; text-transform: uppercase; color: var(--navy); }
+    .sub { margin: 10px 0 0; color: var(--muted); font-size: 17px; max-width: 70ch; }
+    a { color: var(--navy); }
+
+    .guide { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0 8px; }
+    .guide article { background: var(--card); border-radius: 16px; padding: 12px 16px; border: 2px solid var(--line); }
+    .guide h2 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .guide ul, .guide ol { margin: 0; padding-left: 18px; font-size: 14px; }
+
+    .filters { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 0; background: rgba(251, 243, 236, 0.95); }
+    .filters span { font-size: 13px; color: var(--muted); margin-right: 4px; }
+    button { font: inherit; cursor: pointer; border-radius: 99px; border: 2px solid var(--navy); background: transparent; color: var(--navy); padding: 3px 12px; font-size: 13.5px; font-weight: 600; }
+    button[aria-pressed="true"] { background: var(--navy); color: white; }
+    button.copy { border-color: #d9c9b8; color: var(--muted); font-weight: 600; }
+
+    section.block { margin-top: 26px; }
+    .block-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--line); padding-bottom: 6px; }
+    .block-head h2 { margin: 0; font-size: 24px; color: var(--navy); }
+    .block-head .meta { color: var(--muted); font-size: 14px; }
+    section.block.be .block-head h2 { color: #b8651a; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+
+    .item { background: var(--card); border-radius: 14px; padding: 12px 14px; border: 2px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+    .item.be { border-color: #f3cfa6; background: #fff6ec; }
+    .item header { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+    .item .id { font-family: Consolas, ui-monospace, monospace; font-size: 12.5px; color: var(--muted); font-weight: 700; }
+    .item .resp { font-size: 11.5px; font-weight: 800; padding: 1px 8px; border-radius: 99px; background: #e9ebfb; color: var(--navy); white-space: nowrap; }
+    .item h3 { margin: 0; font-size: 16px; line-height: 1.25; }
+    .labels { display: flex; flex-wrap: wrap; gap: 4px; }
+    .labels span { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 5px; color: #1f2259; }
+    .item ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: #34365f; }
+    .deps { font-size: 12.5px; font-weight: 700; color: #b8651a; }
+    .deps.unlock { color: #18865a; }
+    code { font-family: Consolas, ui-monospace, monospace; font-size: 0.92em; background: #f1e6da; padding: 0 4px; border-radius: 4px; }
+
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--navy); color: white; padding: 8px 16px; border-radius: 99px; font-size: 14px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 860px) { .guide { grid-template-columns: 1fr; } h1 { font-size: 34px; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Abathur · pseudo backlog</h1>
+    <p class="sub">Tarjetas de referencia para armar el Trello. Siguen los bloques de la <a href="infografia.html">infografía</a> y el detalle del <a href="roadmap.html">roadmap</a>. Al final están los bloqueantes de backend, con lo que desbloquea cada uno.</p>
+
+    <div class="guide">
+      <article>
+        <h2>Listas sugeridas</h2>
+        <ol>
+          <li>Backlog</li>
+          <li>Esta semana</li>
+          <li>En curso</li>
+          <li>Esperando backend</li>
+          <li>En revisión</li>
+          <li>Hecho</li>
+        </ol>
+      </article>
+      <article>
+        <h2>De acá a la tarjeta</h2>
+        <ul>
+          <li>Título: el id y el nombre, por ejemplo <code>F-10 · Listado de artículos</code>.</li>
+          <li>Miembro: el responsable.</li>
+          <li>Etiquetas: las temáticas, más <code>Backend</code> en los BE.</li>
+          <li>Checklist: los criterios de aceptación.</li>
+          <li>Vencimiento: el cierre del bloque.</li>
+          <li>Si depende de un BE pendiente, va a <b>Esperando backend</b>.</li>
+        </ul>
+      </article>
+      <article>
+        <h2>Carga rápida</h2>
+        <ul>
+          <li>Con <b>Copiar títulos</b> se copian los títulos de ese bloque, uno por línea.</li>
+          <li>Pegados en “Añadir una tarjeta”, Trello ofrece crear una tarjeta por línea.</li>
+          <li>Después se completan etiquetas, checklist y fecha.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filtrar por responsable">
+      <span>Responsable:</span>
+      <button type="button" data-resp="todo" aria-pressed="true">Todo el equipo</button>
+      <button type="button" data-resp="A" aria-pressed="false">Integrante A</button>
+      <button type="button" data-resp="B" aria-pressed="false">Integrante B</button>
+      <button type="button" data-resp="FR" aria-pressed="false">FR · Facundo Rodríguez</button>
+      <span id="count"></span>
+    </div>
+
+    <main id="board"></main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const colores = {
+      'Servicios y DI': '#cfe6ff',
+      Directivas: '#ffd9a8',
+      Pipes: '#f7d0ec',
+      Rutas: '#d5f0c9',
+      'Control de flujo': '#fff0a8',
+      HTTP: '#c9eef0',
+      Formularios: '#e0d6ff',
+      Signals: '#ffc9c9',
+      Tipado: '#e4e4e4',
+      Backend: '#ffcf99',
+    };
+
+    const bloques = [
+      { id: 'B0', titulo: 'Arranque', inicio: '2026-10-26', fin: '2026-10-28' },
+      { id: 'B1', titulo: 'Consulta y propuestas', inicio: '2026-10-29', fin: '2026-11-04' },
+      { id: 'B2', titulo: 'Votación con signals', inicio: '2026-11-05', fin: '2026-11-11' },
+      { id: 'B3', titulo: 'Decisión y reputación', inicio: '2026-11-12', fin: '2026-11-16' },
+      { id: 'B4', titulo: 'Cuentas y permisos', inicio: '2026-11-16', fin: '2026-11-16' },
+      { id: 'B5', titulo: 'Entrega del TP', inicio: '2026-11-17', fin: '2026-11-17' },
+      { id: 'B6', titulo: 'Ensayo de la defensa', inicio: '2026-11-18', fin: '2026-11-19' },
+      { id: 'B7', titulo: 'Defensa presencial', inicio: '2026-11-20', fin: '2026-11-20' },
+    ];
+
+    const items = [
+      // B0 · Arranque
+      { id: 'F-01', bloque: 'B0', resp: 'Todos', titulo: 'Crear el proyecto Angular standalone con TypeScript strict', unidades: ['Tipado'],
+        criterios: ['`strict` y `noImplicitAny` activos en tsconfig', '`ng build` sin errores', 'Carpetas `core/`, `features/` y `shared/`'] },
+      { id: 'F-02', bloque: 'B0', resp: 'Todos', titulo: 'ESLint con `no-explicit-any` en error', unidades: ['Tipado'],
+        criterios: ['`ng lint` falla ante un `any`', 'Se corre antes de cada merge a main'] },
+      { id: 'F-03', bloque: 'B0', resp: 'Todos', titulo: 'Modelos del contrato en `core/models`', unidades: ['Tipado'],
+        criterios: ['`Role`, `ProposalStatus`, `LoadState<T>`, `ApiError`', 'DTOs de artículo, versión, categoría, propuesta, voto y evento de reputación', '`content` es `string` Markdown', 'Mismos literales que viajan en el JSON'] },
+      { id: 'F-04', bloque: 'B0', resp: 'FR', titulo: 'Token `API_BASE_URL`, `provideHttpClient` e interceptor de autenticación', unidades: ['Servicios y DI', 'HTTP'],
+        criterios: ['Ningún servicio escribe la URL base a mano', 'El interceptor agrega el JWT a cada pedido'] },
+      { id: 'F-05', bloque: 'B0', resp: 'FR', titulo: 'Función `readApiError(error: unknown): ApiError`', unidades: ['HTTP', 'Tipado'],
+        criterios: ['Estrecha `unknown` sin casts', 'Spec con error de red y con cuerpo de la API'] },
+      { id: 'F-06', bloque: 'B0', resp: 'A', titulo: 'Shell, layout y `app.routes.ts` con `loadComponent`', unidades: ['Rutas'],
+        criterios: ['Navegación con `routerLink` y `router-outlet`', 'Ruta comodín a una página de no encontrado'] },
+      { id: 'F-07', bloque: 'B0', resp: 'A', titulo: 'Ingreso con formulario reactivo, `AuthService` y `authGuard`', unidades: ['Formularios', 'Rutas', 'HTTP'], depende: ['BE-0'],
+        criterios: ['Validación de campos obligatorios', 'Error de credenciales mostrado con `@if`', 'Sin sesión, las rutas privadas redirigen a `/ingreso`'] },
+      { id: 'F-08', bloque: 'B0', resp: 'B', titulo: 'Directiva `appHasRole` y `roleGuard`', unidades: ['Directivas', 'Rutas'],
+        criterios: ['La directiva recibe uno o varios `Role`', 'El guard corta la navegación si el rol no alcanza'] },
+      { id: 'F-09', bloque: 'B0', resp: 'B', titulo: 'Pipe `estadoPropuesta`', unidades: ['Pipes'],
+        criterios: ['Texto definido en un `Record<ProposalStatus, string>`', 'El compilador avisa si falta un estado'] },
+
+      // B1 · Consulta y propuestas
+      { id: 'F-10', bloque: 'B1', resp: 'A', titulo: 'Listado de artículos con `@for`, `@empty` y estados de carga', unidades: ['HTTP', 'Control de flujo'], depende: ['BE-0'],
+        criterios: ['`ArticlesService` devuelve `Observable<T>` tipado', '`@for` con `track`', 'Carga, error y vacío visibles'] },
+      { id: 'F-11', bloque: 'B1', resp: 'A', titulo: 'Búsqueda por título o resumen y filtro por categoría', unidades: ['Formularios', 'HTTP'], depende: ['BE-0'],
+        criterios: ['El filtro queda en los query params', 'Recargar la página conserva la búsqueda'] },
+      { id: 'F-12', bloque: 'B1', resp: 'A', titulo: 'Detalle de artículo desde `:articleId`', unidades: ['Rutas', 'HTTP'], depende: ['BE-0'],
+        criterios: ['Muestra versión vigente, fuentes y categoría', 'El cuerpo Markdown se parte en bloques tipados (`#`, `##`, párrafo, lista) y se pinta con `@switch`', 'Sin `innerHTML`', 'Enlace a proponer una modificación'] },
+      { id: 'F-13', bloque: 'B1', resp: 'A', titulo: 'Directiva `appAvisoRevision` y pipe `estadoArticulo`', unidades: ['Directivas', 'Pipes'],
+        criterios: ['El aviso aparece si el artículo tiene una propuesta abierta', 'El artículo sigue legible durante la revisión'] },
+      { id: 'F-14', bloque: 'B1', resp: 'A', titulo: 'Árbol de categorías con componente recursivo', unidades: ['Control de flujo'], depende: ['BE-0'],
+        criterios: ['Subcategorías anidadas con `@for`', 'Click en una categoría filtra el listado'] },
+      { id: 'F-15', bloque: 'B1', resp: 'A', titulo: 'Historial de versiones con `DatePipe` es-AR', unidades: ['Pipes', 'Rutas'], depende: ['BE-0'],
+        criterios: ['La versión vigente queda destacada', 'Cada versión muestra quién publicó, fecha y resumen de cambios'] },
+      { id: 'F-16', bloque: 'B1', resp: 'B', titulo: 'Listado de propuestas con filtro por estado', unidades: ['Control de flujo', 'Pipes'], depende: ['BE-0'],
+        criterios: ['El filtro usa los literales de `ProposalStatus`', 'Estado mostrado con el pipe'] },
+      { id: 'F-17', bloque: 'B1', resp: 'B', titulo: 'Detalle de propuesta con `@switch` por estado', unidades: ['Control de flujo', 'Rutas'], depende: ['BE-0'],
+        criterios: ['Una rama por estado, incluidas desaconsejada y controvertida', 'Se prueba con las propuestas de la semilla'] },
+      { id: 'F-18', bloque: 'B1', resp: 'B', titulo: 'Formulario reactivo de propuesta, de creación y de modificación', unidades: ['Formularios', 'HTTP'], depende: ['BE-1'],
+        criterios: ['`FormArray` de fuentes (título y URL)', 'El textarea de contenido envía Markdown', 'El validador avisa si el texto trae una etiqueta HTML', 'La modificación envía la versión de base'] },
+      { id: 'F-19', bloque: 'B1', resp: 'B', titulo: 'Pipe `diffLineas` y vista en dos columnas', unidades: ['Pipes'],
+        criterios: ['Marca líneas agregadas, quitadas e iguales', 'Compara contra la versión de base'] },
+      { id: 'F-20', bloque: 'B1', resp: 'B', titulo: 'Comentarios con formulario template-driven', unidades: ['Formularios', 'HTTP'], depende: ['BE-1'],
+        criterios: ['`ngModel` con validación de texto mínimo', 'El comentario nuevo aparece sin recargar'] },
+      { id: 'F-21', bloque: 'B1', resp: 'B', titulo: 'Botón para abrir la votación, visible por rol', unidades: ['Directivas', 'HTTP'], depende: ['BE-1'],
+        criterios: ['Solo moderador y admin lo ven', 'La propuesta pasa a `en_votacion`'] },
+
+      // B2 · Votación con signals
+      { id: 'F-22', bloque: 'B2', resp: 'B', titulo: '`VoteWeightPolicy` inyectable con spec', unidades: ['Servicios y DI', 'Signals'],
+        criterios: ['Casos de peso 1, 3 y 5', 'Misma fórmula que el servidor'] },
+      { id: 'F-23', bloque: 'B2', resp: 'B', titulo: '`VoteTallyStore` provisto en la ruta de la propuesta', unidades: ['Signals', 'Servicios y DI'],
+        criterios: ['`signal` de votos y borrador', '`computed` de quórum, favor, contra y previa', 'Los arreglos se reemplazan, no se mutan'] },
+      { id: 'F-24', bloque: 'B2', resp: 'B', titulo: 'Formulario de voto, previa y cierre de votación', unidades: ['Formularios', 'Signals', 'HTTP'], depende: ['BE-2'],
+        criterios: ['El cierre se habilita con el `computed` de quórum', 'El peso confirmado es `weight_at_vote`', 'Error de quórum mostrado con `@if`'] },
+      { id: 'F-25', bloque: 'B2', resp: 'B', titulo: 'Pipe `pesoVoto`', unidades: ['Pipes'],
+        criterios: ['Muestra peso y si es previa o confirmado'] },
+      { id: 'F-26', bloque: 'B2', resp: 'A', titulo: 'Formulario de artículo base (admin)', unidades: ['Formularios', 'HTTP'], depende: ['BE-1'],
+        criterios: ['Solo accesible para admin', 'El contenido se envía como Markdown', 'Al guardar, el artículo nace con su versión 1'] },
+      { id: 'F-27', bloque: 'B2', resp: 'A', titulo: 'Formulario de categoría con validador de padre', unidades: ['Formularios'], depende: ['BE-1'],
+        criterios: ['No puede elegirse a sí misma ni a una descendiente como padre', 'El error del servidor también se muestra'] },
+
+      // B3 · Decisión y reputación
+      { id: 'F-28', bloque: 'B3', resp: 'FR', titulo: 'Pantalla de decisión administrativa', unidades: ['Formularios', 'Control de flujo'], depende: ['BE-3'],
+        criterios: ['Validador cruzado: motivo obligatorio si se aparta, hubo empate o falta quórum', 'Muestra el resultado comunitario del store', 'Distingue decisión acorde, apartada y excepcional'] },
+      { id: 'F-29', bloque: 'B3', resp: 'B', titulo: '`ReputationStore` y pantalla `/personas/:userId/reputacion`', unidades: ['Signals', 'Rutas'], depende: ['BE-3'],
+        criterios: ['Puntaje como `computed` de la suma de eventos', 'Lista de eventos con origen y delta'] },
+      { id: 'F-30', bloque: 'B3', resp: 'B', titulo: 'El puntaje se actualiza con los eventos de la decisión', unidades: ['Signals'], depende: ['BE-3'],
+        criterios: ['Sin recargar la página', 'No duplica un evento que ya estaba'] },
+      { id: 'F-31', bloque: 'B3', resp: 'A', titulo: 'Artículo actualizado tras aceptar una propuesta', unidades: ['HTTP', 'Control de flujo'], depende: ['BE-3'],
+        criterios: ['Nueva versión vigente en el detalle', 'La anterior sigue en el historial', 'El aviso de revisión desaparece'] },
+
+      // B4 · Cuentas y permisos
+      { id: 'F-32', bloque: 'B4', resp: 'FR', titulo: 'Administración de usuarios: alta, rol y desactivar', unidades: ['Formularios', 'HTTP'], depende: ['BE-4'],
+        criterios: ['Alta con seudónimo y rol', 'Desactivar no borra la historia'] },
+      { id: 'F-33', bloque: 'B4', resp: 'FR', titulo: 'Pantalla de auditoría', unidades: ['Control de flujo', 'HTTP'], depende: ['BE-4'],
+        criterios: ['Actor, acción, entidad, motivo y fecha', 'Las decisiones excepcionales se distinguen'] },
+      { id: 'F-34', bloque: 'B4', resp: 'A y B', titulo: 'Recorrido completo con los tres roles', unidades: ['Directivas', 'Rutas'],
+        criterios: ['Cada acción prohibida está oculta en la interfaz', 'El mismo pedido hecho a mano falla en la API'] },
+      { id: 'F-35', bloque: 'B4', resp: 'Todos', titulo: 'Barrido de `any` y de casts', unidades: ['Tipado'],
+        criterios: ['`ng lint` limpio', 'Sin `any` en front ni en back'] },
+
+      // B5 · Congelamiento y ensayo
+      { id: 'F-36', bloque: 'B4', resp: 'Todos', titulo: 'Congelamiento el 16/11: solo bugs', unidades: [],
+        criterios: ['Nada nuevo entra a main sin acuerdo de los tres'] },
+      { id: 'F-37', bloque: 'B5', resp: 'Todos', titulo: 'README para levantar front, back y semilla', unidades: [],
+        criterios: ['Alguien que no lo armó puede levantarlo siguiendo los pasos'] },
+      { id: 'F-39', bloque: 'B5', resp: 'Todos', titulo: 'Entrega del TP', unidades: [],
+        criterios: ['Tag `v1.0` en main', 'Semilla recreada antes de la demo'] },
+
+      // B6 · Ensayo
+      { id: 'F-38', bloque: 'B6', resp: 'Todos', titulo: 'Ensayo del guion de defensa', unidades: [],
+        criterios: ['Recorrido de cliente, moderadores y admin', 'Quién explica cada archivo de la tabla de temáticas'] },
+
+      // B7 · Defensa
+      { id: 'F-40', bloque: 'B7', resp: 'Todos', titulo: 'Defensa presencial', unidades: [],
+        criterios: ['Viernes 20/11, con el código ya entregado', 'Guion de cliente, moderadores y admin'] },
+
+      // Backend bloqueante
+      { id: 'BE-0', bloque: 'BE', resp: 'FR', fecha: '2026-10-28', titulo: 'Login, `/me` y GET con semilla', unidades: ['Backend'], desbloquea: ['F-07', 'F-10', 'F-11', 'F-12', 'F-14', 'F-15', 'F-16', 'F-17'],
+        criterios: ['JWT con rol', 'GET de artículos, versiones, categorías, propuestas, comentarios, votos, reputación y auditoría', 'La semilla guarda el cuerpo en Markdown, con al menos un encabezado', 'Semilla con cada estado de propuesta y CORS para Angular'] },
+      { id: 'BE-1', bloque: 'BE', resp: 'FR', fecha: '2026-11-03', titulo: 'POST de artículos, categorías, propuestas y comentarios, y apertura de votación', unidades: ['Backend'], desbloquea: ['F-18', 'F-20', 'F-21', 'F-26', 'F-27'],
+        criterios: ['Rol chequeado en el servidor', 'Categorías sin ciclos', 'El alta de artículo crea la versión 1', '`content` se guarda tal cual y el POST lo rechaza si trae una etiqueta HTML'] },
+      { id: 'BE-2', bloque: 'BE', resp: 'FR', fecha: '2026-11-09', titulo: 'Voto y cierre de votación', unidades: ['Backend'], desbloquea: ['F-24'],
+        criterios: ['Un voto por moderador', 'Guarda `weight_at_vote`', 'Cerrar exige tres votos'] },
+      { id: 'BE-3', bloque: 'BE', resp: 'FR', fecha: '2026-11-11', titulo: 'Decisión, versiones, reputación y auditoría', unidades: ['Backend'], desbloquea: ['F-28', 'F-29', 'F-30', 'F-31'],
+        criterios: ['Aceptar crea una versión nueva', 'Eventos de reputación sin duplicados', 'Motivo obligatorio y auditado cuando corresponde'] },
+      { id: 'BE-4', bloque: 'BE', resp: 'FR', fecha: '2026-11-12', titulo: 'Usuarios y listado de auditoría', unidades: ['Backend'], desbloquea: ['F-32', 'F-33'],
+        criterios: ['Alta con evento inicial de reputación', 'Desactivar conserva votos, eventos y auditoría'] },
+    ];
+
+    const fc = (s) => {
+      const [, m, d] = s.split('-');
+      return `${d}/${m}`;
+    };
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const md = (s) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+    const plano = (s) => s.replace(/`/g, '');
+    const porId = new Map(items.map((i) => [i.id, i]));
+
+    let filtro = 'todo';
+
+    function visible(item) {
+      if (filtro === 'todo') return true;
+      return item.resp === filtro || item.resp === 'Todos' || (item.resp === 'A y B' && (filtro === 'A' || filtro === 'B'));
+    }
+
+    function tarjeta(item) {
+      const labels = item.unidades.map((u) => `<span style="background:${colores[u]}">${u}</span>`).join('');
+      const crit = item.criterios.map((c) => `<li>${md(c)}</li>`).join('');
+      const deps = (item.depende || [])
+        .map((d) => `<div class="deps" title="${esc(plano(porId.get(d)?.titulo ?? ''))}">⛔ Espera ${d} · ${fc(porId.get(d).fecha)}</div>`)
+        .join('');
+      const unlock = item.desbloquea ? `<div class="deps unlock">Desbloquea ${item.desbloquea.join(', ')}</div>` : '';
+      const vence = item.fecha ? `<div class="deps">Necesario el ${fc(item.fecha)}</div>` : '';
+      return `<article class="item ${item.bloque === 'BE' ? 'be' : ''}">
+        <header><span class="id">${item.id}</span><span class="resp">${item.resp}</span></header>
+        <h3>${md(item.titulo)}</h3>
+        ${labels ? `<div class="labels">${labels}</div>` : ''}
+        <ul>${crit}</ul>${deps}${vence}${unlock}
+      </article>`;
+    }
+
+    function seccion(id, titulo, meta, lista, esBE) {
+      if (lista.length === 0) return '';
+      return `<section class="block ${esBE ? 'be' : ''}">
+        <div class="block-head">
+          <h2>${titulo}</h2>
+          <div class="meta">${meta} · ${lista.length} tarjetas <button type="button" class="copy" data-copy="${id}">Copiar títulos</button></div>
+        </div>
+        <div class="grid">${lista.map(tarjeta).join('')}</div>
+      </section>`;
+    }
+
+    function render() {
+      const board = document.getElementById('board');
+      let html = '';
+      for (const b of bloques) {
+        const lista = items.filter((i) => i.bloque === b.id && visible(i));
+        const rango = b.inicio === b.fin ? fc(b.inicio) : `${fc(b.inicio)} → ${fc(b.fin)}`;
+        html += seccion(b.id, `${b.id} · ${b.titulo}`, `${rango} · vence ${fc(b.fin)}`, lista, false);
+      }
+      const be = items.filter((i) => i.bloque === 'BE' && visible(i));
+      html += seccion('BE', 'Backend bloqueante', 'a cargo de FR', be, true);
+      board.innerHTML = html;
+      const total = items.filter(visible).length;
+      document.getElementById('count').textContent = `${total} tarjetas`;
+    }
+
+    function avisar(texto) {
+      const t = document.getElementById('toast');
+      t.textContent = texto;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1800);
+    }
+
+    async function copiar(texto) {
+      try {
+        await navigator.clipboard.writeText(texto);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = texto;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+    }
+
+    document.querySelector('.filters').addEventListener('click', (e) => {
+      const btn = e.target instanceof Element ? e.target.closest('button[data-resp]') : null;
+      if (!btn) return;
+      filtro = btn.dataset.resp;
+      document.querySelectorAll('button[data-resp]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      render();
+    });
+
+    document.getElementById('board').addEventListener('click', async (e) => {
+      const btn = e.target instanceof Element ? e.target.closest('button[data-copy]') : null;
+      if (!btn) return;
+      const lista = items.filter((i) => i.bloque === btn.dataset.copy && visible(i));
+      await copiar(lista.map((i) => `${i.id} · ${plano(i.titulo)}`).join('\n'));
+      avisar(`${lista.length} títulos copiados`);
+    });
+
+    render();
+  </script>
+</body>
+</html>
