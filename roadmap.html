@@ -444,7 +444,9 @@
       <p>El repositorio queda así:</p>
       <pre>Abathur/
   roadmap.html
-  frontend/     Angular standalone, TypeScript strict
+  src/          Angular standalone en la raíz del repo, TypeScript strict
+  angular.json
+  package.json
   backend/      Express + TypeScript + SQLite</pre>
       <p>Los tipos del contrato se escriben en los dos lados. El JSON es la fuente de verdad compartida. Fechas de la API: <code>string</code> ISO. La pantalla las muestra con <code>DatePipe</code>. Los identificadores son <code>string</code>. Los estados son uniones de literales, y ese mismo literal viaja en el JSON.</p>
       <pre>type Role = 'admin' | 'moderador' | 'cliente';
