@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 
 /**
  * F-06 · Rutas con `loadComponent`.
- * La carcasa envuelve las pantallas; `**` cae en no encontrado.
+ * F-10 / F-16 · listados esqueleto dentro de la carcasa.
+ * La ruta `**` queda al final: página no encontrada.
  */
 export const routes: Routes = [
   {
@@ -15,6 +16,20 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () =>
           import('./features/inicio/inicio').then((modulo) => modulo.Inicio),
+      },
+      {
+        path: 'articulos',
+        loadComponent: () =>
+          import('./features/articulos/listado-articulos/listado-articulos').then(
+            (modulo) => modulo.ListadoArticulos,
+          ),
+      },
+      {
+        path: 'propuestas',
+        loadComponent: () =>
+          import(
+            './features/propuestas/listado-propuestas/listado-propuestas'
+          ).then((modulo) => modulo.ListadoPropuestas),
       },
       {
         path: '**',

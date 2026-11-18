@@ -1,0 +1,34 @@
+.aviso {
+  padding: 1.5rem 1.75rem;
+  border: 2px solid #f3cfa6;
+  border-radius: 0.75rem;
+  background: #fff6ec;
+  color: #1f2937;
+}
+
+.etiqueta {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #b8651a;
+}
+
+.aviso h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+  color: #1f2854;
+}
+
+.ticket {
+  margin: 0 0 0.75rem;
+  font-family: Consolas, ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: #5d5f86;
+}
+
+.mensaje {
+  margin: 0;
+  line-height: 1.5;
+}

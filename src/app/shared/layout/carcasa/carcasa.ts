@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 /**
  * F-06 · Componente shell / layout.
  * Marca, navegación con `routerLink` y el `router-outlet` de las pantallas hijas.
  */
 @Component({
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   selector: 'app-carcasa',
   styleUrl: './carcasa.css',
   templateUrl: './carcasa.html',
