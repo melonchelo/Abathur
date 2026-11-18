@@ -11,6 +11,14 @@
 }
 
 .inicio p {
-  margin-bottom: 0;
   line-height: 1.6;
+}
+
+.atajos {
+  margin-bottom: 0;
+}
+
+.atajos a {
+  color: #1f2854;
+  font-weight: 600;
 }

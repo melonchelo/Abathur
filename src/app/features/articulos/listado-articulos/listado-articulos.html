@@ -1,0 +1,22 @@
+<section class="pantalla">
+  <header class="encabezado">
+    <h1>{{ tituloPantalla }}</h1>
+    <p class="ayuda">Consulta de artículos publicados. Esqueleto de {{ codigoTicket }}.</p>
+  </header>
+
+  @switch (estado.status) {
+    @case ('loading') {
+      <p class="estado-carga">Cargando artículos…</p>
+    }
+    @case ('error') {
+      <app-aviso-no-disponible
+        [nombrePantalla]="tituloPantalla"
+        [codigoTicket]="codigoTicket"
+        [error]="estado.error"
+      />
+    }
+    @case ('ready') {
+      <p class="estado-carga">Acá irá el listado tipado con control de flujo.</p>
+    }
+  }
+</section>

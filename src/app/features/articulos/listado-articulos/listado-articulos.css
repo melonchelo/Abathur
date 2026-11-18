@@ -1,0 +1,24 @@
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.encabezado h1 {
+  margin: 0 0 0.35rem;
+  color: #1f2854;
+}
+
+.ayuda {
+  margin: 0;
+  color: #5d5f86;
+  line-height: 1.45;
+}
+
+.estado-carga {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  background: white;
+  color: #5d5f86;
+}

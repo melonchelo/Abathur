@@ -1,0 +1,8 @@
+<section class="aviso" role="status" aria-live="polite">
+  <p class="etiqueta">Control de error</p>
+  <h2>{{ nombrePantalla() }}</h2>
+  @if (codigoTicket()) {
+    <p class="ticket">Tarjeta {{ codigoTicket() }}</p>
+  }
+  <p class="mensaje">{{ mensajeVisible() }}</p>
+</section>
