@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  color: #1f2937;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #1f2854;
+  color: white;
+}
+
+.cabecera a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.marca {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.contenido {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
