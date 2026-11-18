@@ -27,3 +27,9 @@ export interface RespuestaLogin {
   token: string;
   user: Usuario;
 }
+
+/** Alias del backlog (`LoginRequest`). */
+export type LoginRequest = PedidoLogin;
+
+/** Alias del backlog (`LoginResponse`). */
+export type LoginResponse = RespuestaLogin;

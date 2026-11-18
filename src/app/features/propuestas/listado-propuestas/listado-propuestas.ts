@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 
+import { ESTADOS_PROPUESTA } from '../../../core/models/estado-propuesta';
 import type { EstadoCarga } from '../../../core/models/estado-carga';
 import type { Propuesta } from '../../../core/models/propuesta';
+import { PipeEstadoPropuesta } from '../../../shared/pipes/pipe-estado-propuesta';
 import {
   AvisoNoDisponible,
   crearErrorNoDisponible,
@@ -12,7 +14,7 @@ import {
  * Todavía no filtra por estado ni llama a la API.
  */
 @Component({
-  imports: [AvisoNoDisponible],
+  imports: [AvisoNoDisponible, PipeEstadoPropuesta],
   selector: 'app-listado-propuestas',
   styleUrl: './listado-propuestas.css',
   templateUrl: './listado-propuestas.html',
@@ -20,6 +22,8 @@ import {
 export class ListadoPropuestas {
   readonly tituloPantalla = 'Listado de propuestas';
   readonly codigoTicket = 'F-16';
+  /** Referencia F-09 mientras el listado real no llama a la API. */
+  readonly estadosReferencia = ESTADOS_PROPUESTA;
 
   /** Estado de la pantalla; hoy queda en el control de “no disponible”. */
   readonly estado: EstadoCarga<readonly Propuesta[]> = {
