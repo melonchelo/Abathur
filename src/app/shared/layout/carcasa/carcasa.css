@@ -7,8 +7,10 @@
 
 .cabecera {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem 1.5rem;
   padding: 1rem 2rem;
   background-color: #1f2854;
   color: white;
@@ -33,6 +35,26 @@ nav {
 nav a.activo {
   text-decoration: underline;
   text-underline-offset: 0.25rem;
+}
+
+.sesion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.usuario {
+  font-size: 0.95rem;
+}
+
+.salir {
+  font: inherit;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
 }
 
 .contenido {

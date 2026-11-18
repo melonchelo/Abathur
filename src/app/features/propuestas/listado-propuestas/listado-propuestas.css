@@ -15,6 +15,21 @@
   line-height: 1.45;
 }
 
+.referencia-estados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #5d5f86;
+}
+
+.referencia-estados span {
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  background: #eef0f8;
+}
+
 .estado-carga {
   margin: 0;
   padding: 1rem 1.25rem;

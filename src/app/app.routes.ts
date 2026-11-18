@@ -1,13 +1,21 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+
 /**
  * F-06 · Rutas con `loadComponent`.
- * F-10 / F-16 · listados esqueleto dentro de la carcasa.
- * La ruta `**` queda al final: página no encontrada.
+ * F-07/F-08 · ingreso público; carcasa privada con `authGuard` y `roleGuard`.
  */
 export const routes: Routes = [
   {
+    path: 'ingreso',
+    loadComponent: () =>
+      import('./features/ingreso/ingreso').then((modulo) => modulo.Ingreso),
+  },
+  {
     path: '',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./shared/layout/carcasa/carcasa').then((modulo) => modulo.Carcasa),
     children: [
@@ -30,6 +38,14 @@ export const routes: Routes = [
           import(
             './features/propuestas/listado-propuestas/listado-propuestas'
           ).then((modulo) => modulo.ListadoPropuestas),
+      },
+      {
+        path: 'admin',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/aviso-solo-admin/aviso-solo-admin').then(
+            (modulo) => modulo.AvisoSoloAdmin,
+          ),
       },
       {
         path: '**',

@@ -68,4 +68,11 @@ export type {
   ReputationSummary,
 } from './evento-reputacion';
 
-export type { Usuario, User, PedidoLogin, RespuestaLogin } from './usuario';
+export type {
+  Usuario,
+  User,
+  PedidoLogin,
+  LoginRequest,
+  RespuestaLogin,
+  LoginResponse,
+} from './usuario';

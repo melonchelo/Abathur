@@ -2,6 +2,12 @@
   <header class="encabezado">
     <h1>{{ tituloPantalla }}</h1>
     <p class="ayuda">Propuestas de la comunidad. Esqueleto de {{ codigoTicket }}.</p>
+    <p class="referencia-estados">
+      Estados (pipe F-09):
+      @for (estado of estadosReferencia; track estado) {
+        <span>{{ estado | estadoPropuesta }}</span>
+      }
+    </p>
   </header>
 
   @switch (estado.status) {
