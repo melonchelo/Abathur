@@ -1,10 +1,27 @@
 <section class="pantalla">
   <header class="encabezado">
     <h1>{{ tituloPantalla }}</h1>
-    <p class="ayuda">Consulta de artículos publicados. Esqueleto de {{ codigoTicket }}.</p>
+    <p class="ayuda">Consulta publicada ({{ codigoTicket }}). El detalle todavía es un módulo incompleto.</p>
+    <ng-container *appHasRole="'admin'">
+      <a routerLink="/articulos/nuevo" class="accion">Nuevo artículo</a>
+    </ng-container>
   </header>
 
-  @switch (estado.status) {
+  <form class="busqueda" (ngSubmit)="buscar()">
+    <label>
+      Buscar
+      <input
+        name="q"
+        [ngModel]="consulta()"
+        (ngModelChange)="consulta.set($event)"
+        placeholder="Título o resumen"
+      />
+    </label>
+    <button type="submit">Buscar</button>
+  </form>
+
+  @let s = estado();
+  @switch (s.status) {
     @case ('loading') {
       <p class="estado-carga">Cargando artículos…</p>
     }
@@ -12,11 +29,28 @@
       <app-aviso-no-disponible
         [nombrePantalla]="tituloPantalla"
         [codigoTicket]="codigoTicket"
-        [error]="estado.error"
+        [error]="s.error"
       />
     }
     @case ('ready') {
-      <p class="estado-carga">Acá irá el listado tipado con control de flujo.</p>
+      <ul class="lista">
+        @for (articulo of s.data; track articulo.id) {
+          <li>
+            <a [routerLink]="['/articulos', articulo.id]">
+              <strong>{{ articulo.title }}</strong>
+              <span>{{ articulo.summary }}</span>
+              <em>
+                v{{ articulo.currentVersionNumber }}
+                @if (articulo.underReview) {
+                  · en revisión
+                }
+              </em>
+            </a>
+          </li>
+        } @empty {
+          <li class="vacio">No hay artículos para este filtro.</li>
+        }
+      </ul>
     }
   }
 </section>

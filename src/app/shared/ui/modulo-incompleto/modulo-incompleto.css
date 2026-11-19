@@ -1,0 +1,15 @@
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.volver {
+  margin: 0;
+  color: #5d5f86;
+}
+
+.volver a {
+  color: #1f2854;
+  font-weight: 600;
+}
