@@ -1,16 +1,24 @@
 <section class="pantalla">
   <header class="encabezado">
     <h1>{{ tituloPantalla }}</h1>
-    <p class="ayuda">Propuestas de la comunidad. Esqueleto de {{ codigoTicket }}.</p>
-    <p class="referencia-estados">
-      Estados (pipe F-09):
-      @for (estado of estadosReferencia; track estado) {
-        <span>{{ estado | estadoPropuesta }}</span>
-      }
-    </p>
+    <p class="ayuda">Estados con pipe F-09. El detalle todavía es un módulo incompleto.</p>
+    <ng-container *appHasRole="['cliente', 'moderador']">
+      <a routerLink="/propuestas/nueva" class="accion">Nueva propuesta</a>
+    </ng-container>
   </header>
 
-  @switch (estado.status) {
+  <label class="filtro">
+    Estado
+    <select [value]="filtroEstado()" (change)="cambiarFiltro($event)">
+      <option value="">Todos</option>
+      @for (valor of estados; track valor) {
+        <option [value]="valor">{{ valor | estadoPropuesta }}</option>
+      }
+    </select>
+  </label>
+
+  @let s = estado();
+  @switch (s.status) {
     @case ('loading') {
       <p class="estado-carga">Cargando propuestas…</p>
     }
@@ -18,11 +26,23 @@
       <app-aviso-no-disponible
         [nombrePantalla]="tituloPantalla"
         [codigoTicket]="codigoTicket"
-        [error]="estado.error"
+        [error]="s.error"
       />
     }
     @case ('ready') {
-      <p class="estado-carga">Acá irá el listado filtrado por estado de propuesta.</p>
+      <ul class="lista">
+        @for (propuesta of s.data; track propuesta.id) {
+          <li>
+            <a [routerLink]="['/propuestas', propuesta.id]">
+              <strong>{{ propuesta.proposed.title }}</strong>
+              <span>{{ propuesta.authorAlias }} · {{ propuesta.kind }}</span>
+              <em>{{ propuesta.status | estadoPropuesta }}</em>
+            </a>
+          </li>
+        } @empty {
+          <li class="vacio">No hay propuestas con ese filtro.</li>
+        }
+      </ul>
     }
   }
 </section>

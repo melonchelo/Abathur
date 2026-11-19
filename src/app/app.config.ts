@@ -5,12 +5,13 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { API_BASE_URL } from './core/api-url.token';
 import { authInterceptor } from './core/auth.interceptor';
+import { httpTimeoutInterceptor } from './core/http-timeout.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     { provide: API_BASE_URL, useValue: 'http://localhost:3000/api' },
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, httpTimeoutInterceptor])),
   ],
 };
